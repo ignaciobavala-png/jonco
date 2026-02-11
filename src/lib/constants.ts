@@ -2,6 +2,10 @@
 
 export const JON_CONTACT = {
   phone: "5491140765354",
+  email: "expediciones@jonco.com.ar",
+  instagram: "joncoexperience",
+  location: "Tigre, Buenos Aires, Argentina",
+  coordinates: "-34.4267°S, 58.5796°W",
   getWhatsAppLink: (message: string) => 
     `https://wa.me/5491140765354?text=${encodeURIComponent(message)}`,
 };

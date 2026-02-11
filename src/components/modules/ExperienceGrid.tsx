@@ -7,6 +7,17 @@ export const ExperienceGrid = () => {
   const [selectedPack, setSelectedPack] = useState<any>(null);
   const [activeImg, setActiveImg] = useState<string | null>(null);
 
+  const formatPrice = (value: unknown) => {
+    if (typeof value !== "number" || !Number.isFinite(value)) return null;
+    return new Intl.NumberFormat("es-AR").format(value);
+  };
+
+  useEffect(() => {
+    const handleClose = () => setSelectedPack(null);
+    window.addEventListener("jonco:closeExperienceModal", handleClose);
+    return () => window.removeEventListener("jonco:closeExperienceModal", handleClose);
+  }, []);
+
   useEffect(() => {
     if (selectedPack) {
       document.body.style.overflow = "hidden";
@@ -39,7 +50,7 @@ export const ExperienceGrid = () => {
             
             <div className="absolute top-6 right-6">
               <span className="bg-black/50 backdrop-blur-md text-white text-[10px] px-3 py-1 rounded-full border border-white/10 font-bold uppercase tracking-widest">
-                U$D 120
+                {formatPrice(tour.price) ? `$ ${formatPrice(tour.price)}` : "Consultar"}
               </span>
             </div>
 
@@ -133,7 +144,11 @@ export const ExperienceGrid = () => {
                       {selectedPack.category}
                     </span>
                     <span className="text-white text-xl font-light tracking-tighter">
-                      Desde <span className="font-black text-gold">U$D 120</span> / pax
+                      Desde{" "}
+                      <span className="font-black text-gold">
+                        {formatPrice(selectedPack.price) ? `$ ${formatPrice(selectedPack.price)}` : "Consultar"}
+                      </span>{" "}
+                      / pax
                     </span>
                   </div>
                   
@@ -142,7 +157,10 @@ export const ExperienceGrid = () => {
                   </h2>
                   
                   <p className="text-zinc-500 text-lg font-light leading-relaxed mb-10 italic border-l border-gold/30 pl-6">
-                    {selectedPack.description}
+                    {selectedPack.description}{" "}
+                    {formatPrice(selectedPack.price) ? (
+                      <span className="text-white/70">(Precio: $ {formatPrice(selectedPack.price)})</span>
+                    ) : null}
                   </p>
 
                   {/* CUADRO DE SALIDAS */}
