@@ -27,7 +27,7 @@ export const EXPERIENCIAS = [
   },
   {
     id: "atardecer-kayak",
-    title: "Atardecer en Kayak",
+    title: "rio y  Kayak",
     category: "Aventura",
     description: "Conecta con la naturaleza mientras remas hacia la puesta del sol. Una travesía por los rincones donde el agua y el cielo se vuelven uno solo.",
     image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=1200",

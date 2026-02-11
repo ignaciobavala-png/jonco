@@ -22,16 +22,18 @@ export const ExperienceGrid = () => {
     if (selectedPack) {
       document.body.style.overflow = "hidden";
       setActiveImg(selectedPack.image);
+      window.dispatchEvent(new Event("jonco:experienceModalOpen"));
     } else {
       document.body.style.overflow = "unset";
       setActiveImg(null);
+      window.dispatchEvent(new Event("jonco:experienceModalClose"));
     }
   }, [selectedPack]);
 
   return (
-    <section className="py-24 px-6 max-w-7xl mx-auto" id="experiencias">
+    <section className="py-24 px-6 w-full">
       {/* GRID DE CARDS PRINCIPAL */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
         {EXPERIENCIAS.map((tour) => (
           <motion.div
             key={tour.id}
@@ -54,11 +56,11 @@ export const ExperienceGrid = () => {
               </span>
             </div>
 
-            <div className="absolute bottom-0 p-10 w-full">
+            <div className="absolute bottom-0 p-8 sm:p-10 w-full">
               <span className="text-gold text-[10px] font-black uppercase tracking-[0.3em] mb-3 block">
                 {tour.category}
               </span>
-              <h3 className="text-3xl font-black uppercase tracking-tighter leading-none mb-6 italic group-hover:not-italic transition-all text-white">
+              <h3 className="text-xl sm:text-2xl lg:text-2xl xl:text-3xl font-black uppercase tracking-tighter leading-snug mb-3 italic group-hover:not-italic transition-all text-white break-words pr-2 pb-1">
                 {tour.title}
               </h3>
               <p className="text-white border-b border-gold/50 inline-block pb-1 text-[10px] uppercase tracking-widest font-bold group-hover:text-gold transition-colors">
@@ -105,7 +107,7 @@ export const ExperienceGrid = () => {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: "100%", opacity: 0 }}
               transition={{ type: "spring", damping: 30, stiffness: 200 }}
-              className="relative z-10 w-full h-full lg:max-w-7xl lg:h-[85vh] bg-[#0a0a0a] lg:rounded-[3rem] overflow-hidden flex flex-col lg:flex-row shadow-2xl border-white/10 border"
+              className="relative z-10 w-full h-full lg:max-w-7xl lg:h-[85vh] bg-[#0a0a0a] lg:rounded-[3rem] overflow-hidden flex flex-col lg:flex-row shadow-2xl border-white/10 border mx-auto"
             >
               {/* IZQUIERDA: GALERÍA */}
               <div className="relative w-full lg:w-[55%] h-[40vh] sm:h-[50vh] lg:h-full overflow-hidden">

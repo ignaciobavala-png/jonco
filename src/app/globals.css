@@ -2,9 +2,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #000000;
+  --background: #0a0a0a;
   --foreground: #ffffff;
   --gold: #D4AF37;
+  --gold-light: #E6C547;
+  --gold-bright: #F4D03F;
+  --jonco-navbar-h: 112px;
   --zinc-50: #fafafa;
   --zinc-100: #f4f4f5;
   --zinc-200: #e4e4e7;
@@ -15,13 +18,16 @@
   --zinc-700: #3f3f46;
   --zinc-800: #27272a;
   --zinc-900: #18181b;
-  --zinc-950: #090909;
+  --zinc-950: #0a0a0a;
 }
 
+/* stylelint-disable-next-line at-rule-no-unknown -- @theme is a Tailwind CSS v4 feature */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-gold-bright: var(--gold-bright);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -41,6 +47,7 @@ body {
 /* Utilidades para scroll suave */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: var(--jonco-navbar-h);
 }
 
 /* Optimización mobile */
@@ -48,5 +55,26 @@ html {
   * {
     -webkit-tap-highlight-color: transparent;
   }
+}
+
+/* Sombras doradas personalizadas */
+.shadow-gold\/20 {
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+.shadow-gold\/25 {
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
+}
+
+.shadow-gold\/30 {
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+}
+
+.drop-shadow-gold {
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.3));
+}
+
+.drop-shadow-lg {
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
 }
 

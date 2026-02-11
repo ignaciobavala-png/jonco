@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <body className="antialiased bg-black text-white flex flex-col min-h-screen">
+      <body className="antialiased bg-zinc-950 text-white flex flex-col min-h-screen">
         <Navbar />
-        <main className="flex-grow">{children}</main>
+        <main className="flex-grow" style={{ paddingTop: "var(--jonco-navbar-h)" }}>{children}</main>
         <Footer />
       </body>
     </html>
