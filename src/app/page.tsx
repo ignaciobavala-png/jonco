@@ -1,65 +1,90 @@
-import Image from "next/image";
+"use client";
+import { Hero } from "@/components/modules/Hero";
+import { ExperienceGrid } from "@/components/modules/ExperienceGrid";
+import { motion } from "framer-motion";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="relative bg-black min-h-screen overflow-x-hidden">
+      <Hero />
+      
+      {/* SECCIÓN QUIÉNES SOMOS: EL MANIFIESTO DEL CAPITÁN */}
+      <section id="historia" className="relative py-32 md:py-48 px-6 bg-[#050505]">
+        
+        {/* Coordenadas en el fondo */}
+        <div className="absolute top-10 left-10 text-white/[0.03] font-mono text-[10px] tracking-[0.8em] uppercase vertical-text hidden md:block">
+          Exploración Continua // Delta Argentino
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-center">
+            
+            {/* MULTIMEDIA: El lente del explorador */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="w-full lg:w-1/2"
+            >
+              <div className="relative rounded-sm overflow-hidden group shadow-2xl">
+                <img 
+                  src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2070" 
+                  alt="Navegación Jonco" 
+                  className="w-full aspect-[3/4] object-cover grayscale brightness-75 group-hover:brightness-100 group-hover:scale-105 transition-all duration-1000"
+                />
+                <div className="absolute inset-0 border-[20px] border-black/10 pointer-events-none" />
+              </div>
+            </motion.div>
+
+            {/* TEXTO: Relato en Primera Persona */}
+            <div className="w-full lg:w-1/2">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                <span className="text-gold text-[10px] font-black uppercase tracking-[0.5em] mb-10 block opacity-40">
+                  — Identidad y Origen
+                </span>
+
+                {/* TIPOGRAFÍA MANUSCRITA FIRME (Clase font-signature definida en globals.css) */}
+                <div className="mb-12">
+                  <h2 className="font-signature text-5xl md:text-7xl text-white leading-[1.1] drop-shadow-md">
+                    "No heredé una empresa, heredé el pulso de este río. Mi firma es el compromiso de mostrarte su alma."
+                  </h2>
+                </div>
+                
+                <div className="space-y-8 text-zinc-400 text-lg font-light leading-relaxed">
+                  <p>
+                    Soy el Capitán de **Jonco**. Mi historia no se escribe en oficinas, se escribe en el barro de los arroyos y en el reflejo del sol sobre el agua mansa. Aprendí a navegar antes que a caminar, siguiendo el rastro de quienes estuvieron antes que yo.
+                  </p>
+                  
+                  <p>
+                    Para mí, cada expedición es un documento de identidad. No busco clientes, busco compañeros de viaje que sepan apreciar la elegancia de lo salvaje y el valor de un horizonte sin edificios.
+                  </p>
+
+                  {/* Cierre y Firma Robusta */}
+                  <div className="pt-8 flex items-end gap-6 border-t border-white/5">
+                    <div className="flex flex-col">
+                      <span className="text-white text-[10px] uppercase tracking-widest font-black mb-2 opacity-30 italic">Autenticado por</span>
+                      <span className="font-signature text-5xl text-gold pb-2">
+                        Capitán Jonco
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* SECCIÓN EXPERIENCIAS */}
+      <section id="experiencias" className="relative z-10 bg-black">
+        <ExperienceGrid />
+      </section>
+    </main>
   );
 }
