@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { JON_CONTACT } from "@/lib/constants";
 
 export const Navbar = () => {
   const navRef = useRef<HTMLElement | null>(null);
@@ -97,11 +98,17 @@ export const Navbar = () => {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center">
           {/* LOGO */}
-          <button 
-            onClick={scrollToTop} 
-            className="text-xl sm:text-2xl font-black tracking-tighter text-white group active:scale-95 transition-transform"
-          >
-            JONCO<span className="text-gold-light group-hover:text-gold-bright group-hover:animate-pulse">.</span>
+          <button onClick={scrollToTop} className="flex items-center gap-2 group active:scale-95 transition-transform">
+            <img
+              src="/branding/jonco-logo.svg"
+              alt="Jonco logo"
+              width={22}
+              height={22}
+              className="drop-shadow-gold"
+            />
+            <span className="text-xl sm:text-2xl font-black tracking-tighter text-white">
+              JONCO<span className="text-gold-light group-hover:text-gold-bright">.</span>
+            </span>
           </button>
 
           {/* Desktop Navigation */}
@@ -132,7 +139,7 @@ export const Navbar = () => {
             </button>
             
             <a 
-              href="https://wa.me/5491140765354" 
+              href={JON_CONTACT.getWhatsAppLink("Hola Jon! Quiero consultar por una expedición.")} 
               target="_blank"
               className="bg-white text-black px-4 lg:px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gold-light transition-all active:scale-95 shadow-lg hover:shadow-gold/25"
             >
@@ -153,13 +160,15 @@ export const Navbar = () => {
       </nav>
 
       {/* Mobile Menu Overlay */}
-      {mobileMenuOpen && (
-        <motion.div
-          initial={{ opacity: 0, x: "100%" }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: "100%" }}
-          className="fixed inset-0 z-[190] md:hidden bg-black/95 backdrop-blur-lg"
-        >
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: "100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed inset-0 z-[190] md:hidden bg-black/95 backdrop-blur-lg"
+          >
           <div className="flex flex-col items-center justify-center h-full gap-8 px-6">
             <button 
               onClick={scrollToTop}
@@ -186,7 +195,7 @@ export const Navbar = () => {
               Clientes
             </button>
             <a 
-              href="https://wa.me/5491140765354" 
+              href={JON_CONTACT.getWhatsAppLink("Hola Jon! Quiero consultar por una expedición.")} 
               target="_blank"
               className="bg-gold-light text-black px-8 py-4 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-gold-bright transition-all active:scale-95 shadow-lg hover:shadow-gold/30"
             >
@@ -194,7 +203,8 @@ export const Navbar = () => {
             </a>
           </div>
         </motion.div>
-      )}
+        )}
+      </AnimatePresence>
     </>
   );
 };

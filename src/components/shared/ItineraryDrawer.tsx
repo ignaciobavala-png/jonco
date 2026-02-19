@@ -2,6 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Trash2, MessageCircle, Plus, Minus } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
+import { JON_CONTACT } from "@/lib/constants";
 
 export const ItineraryDrawer = () => {
   const { 
@@ -20,8 +21,7 @@ export const ItineraryDrawer = () => {
     const total = getTotalPrice();
     const text = `Hola Jonco! Estuve armando este itinerario en la web:%0A%0A${message}%0A%0A*Total estimado:* ARS ${total.toLocaleString()}%0A%0A¿Podemos coordinar la disponibilidad?`;
     
-    // Cambia este número por el de Jonco (ej: 54911...)
-    window.open(`https://wa.me/5491100000000?text=${text}`, "_blank");
+    window.open(JON_CONTACT.getWhatsAppLink(text), "_blank");
   };
 
   return (

@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 type Testimonial = {
   name: string;
@@ -34,79 +35,140 @@ const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
+const AUTOPLAY_DELAY = 5000;
+
 export const ClientFeedback = () => {
+  const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState<1 | -1>(1);
+  const [paused, setPaused] = useState(false);
+  const dragStartX = useRef<number | null>(null);
+
+  const goTo = (index: number, dir: 1 | -1) => {
+    setDirection(dir);
+    setCurrent(index);
+  };
+
+  const next = () => goTo((current + 1) % TESTIMONIALS.length, 1);
+  const prev = () => goTo((current - 1 + TESTIMONIALS.length) % TESTIMONIALS.length, -1);
+
+  useEffect(() => {
+    if (paused) return;
+    const timer = setTimeout(next, AUTOPLAY_DELAY);
+    return () => clearTimeout(timer);
+  }, [current, paused]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    dragStartX.current = e.touches[0].clientX;
+    setPaused(true);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (dragStartX.current === null) return;
+    const delta = e.changedTouches[0].clientX - dragStartX.current;
+    if (Math.abs(delta) > 40) delta < 0 ? next() : prev();
+    dragStartX.current = null;
+    setPaused(false);
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    dragStartX.current = e.clientX;
+    setPaused(true);
+  };
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    if (dragStartX.current === null) return;
+    const delta = e.clientX - dragStartX.current;
+    if (Math.abs(delta) > 40) delta < 0 ? next() : prev();
+    dragStartX.current = null;
+    setPaused(false);
+  };
+
+  const variants = {
+    enter: (dir: number) => ({ x: dir > 0 ? 80 : -80, opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit: (dir: number) => ({ x: dir > 0 ? -80 : 80, opacity: 0 }),
+  };
+
+  const t = TESTIMONIALS[current];
+
   return (
     <section className="relative z-10 bg-black py-20 sm:py-24 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-8 mb-12">
-          <div className="space-y-5 max-w-2xl">
-            <span className="text-gold text-[8px] sm:text-[10px] font-black uppercase tracking-[0.5em] block opacity-60">
-              — Confianza verificada
-            </span>
-
-            <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tighter text-white leading-none italic">
-              Feedback de clientes
-            </h3>
-
-            <p className="text-zinc-400 text-sm sm:text-base lg:text-lg font-light leading-relaxed border-l border-white/5 pl-6">
-              Testimonios reales. Sin promesas vacías: resultados, atmósfera y ejecución.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="bg-zinc-900/40 border border-white/5 rounded-full px-4 py-2">
-              <span className="text-white/60 text-[10px] uppercase tracking-widest font-black">
-                Atención personalizada
-              </span>
-            </div>
-            <div className="bg-zinc-900/40 border border-white/5 rounded-full px-4 py-2">
-              <span className="text-white/60 text-[10px] uppercase tracking-widest font-black">
-                Seguridad
-              </span>
-            </div>
-          </div>
+      <div className="max-w-3xl mx-auto">
+        <div className="mb-12 space-y-4">
+          <span className="text-gold text-[8px] sm:text-[10px] font-black uppercase tracking-[0.5em] block opacity-60">
+            — Confianza verificada
+          </span>
+          <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tighter text-white leading-none italic">
+            Feedback de clientes
+          </h3>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {TESTIMONIALS.map((t) => (
+        <div
+          className="relative cursor-grab active:cursor-grabbing select-none"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+        >
+          <AnimatePresence mode="wait" custom={direction}>
             <motion.div
-              key={`${t.name}-${t.experience}`}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="bg-zinc-900/40 border border-white/5 rounded-[2rem] p-8 overflow-hidden"
+              key={current}
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.35, ease: "easeInOut" }}
+              className="bg-zinc-900/40 border border-white/5 rounded-[2rem] p-8 sm:p-12"
             >
-              <div className="flex items-start justify-between gap-6 mb-6">
-                <div className="space-y-2">
-                  <span className="text-white text-[10px] uppercase tracking-widest font-black opacity-70">
-                    {t.name}
-                  </span>
-                  <span className="text-white/30 text-[10px] uppercase tracking-widest font-black">
-                    {t.location}
-                  </span>
-                </div>
-
-                <span className="text-gold text-[10px] uppercase tracking-widest font-black whitespace-nowrap">
-                  {t.experience}
-                </span>
-              </div>
-
-              <p className="text-zinc-300 text-sm leading-relaxed font-light italic border-l border-white/5 pl-5">
-                “{t.text}”
+              <span className="text-gold/20 text-8xl font-black leading-none block -mb-4 select-none">
+                &ldquo;
+              </span>
+              <p className="text-zinc-200 text-lg sm:text-xl lg:text-2xl font-light leading-relaxed italic pl-2 mb-10">
+                {t.text}
               </p>
-
-              <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
-                <span className="text-white/30 text-[10px] uppercase tracking-widest font-black">
-                  Experiencia realizada
-                </span>
-                <span className="text-gold/60 text-[10px] uppercase tracking-[0.35em] font-black">
-                  {t.date}
-                </span>
+              <div className="flex items-end justify-between border-t border-white/5 pt-6">
+                <div className="space-y-1">
+                  <p className="text-white text-[11px] uppercase tracking-widest font-black">{t.name}</p>
+                  <p className="text-white/30 text-[10px] uppercase tracking-widest font-black">{t.location}</p>
+                </div>
+                <div className="text-right space-y-1">
+                  <p className="text-gold text-[10px] uppercase tracking-widest font-black">{t.experience}</p>
+                  <p className="text-white/20 text-[10px] uppercase tracking-[0.3em] font-black">{t.date}</p>
+                </div>
               </div>
             </motion.div>
-          ))}
+          </AnimatePresence>
         </div>
+
+        <div className="flex items-center justify-between mt-8 px-2">
+          <div className="flex items-center gap-2">
+            {TESTIMONIALS.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => goTo(i, i > current ? 1 : -1)}
+                className={`transition-all duration-300 rounded-full ${
+                  i === current ? "w-6 h-1.5 bg-gold" : "w-1.5 h-1.5 bg-white/20 hover:bg-white/40"
+                }`}
+              />
+            ))}
+          </div>
+          <span className="text-white/20 text-[10px] uppercase tracking-widest font-black">
+            {current + 1} / {TESTIMONIALS.length}
+          </span>
+        </div>
+
+        {!paused && (
+          <div className="mt-4 h-px bg-white/5 rounded-full overflow-hidden">
+            <motion.div
+              key={current}
+              className="h-full bg-gold/40"
+              initial={{ width: "0%" }}
+              animate={{ width: "100%" }}
+              transition={{ duration: AUTOPLAY_DELAY / 1000, ease: "linear" }}
+            />
+          </div>
+        )}
       </div>
     </section>
   );

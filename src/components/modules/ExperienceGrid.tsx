@@ -1,14 +1,57 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { EXPERIENCIAS } from "@/lib/constants";
+import { JON_CONTACT, formatReservaMessage } from "@/lib/constants";
+
+type Experiencia = {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  price: number;
+  image: string;
+  gallery: string[];
+};
 
 export const ExperienceGrid = () => {
-  const [selectedPack, setSelectedPack] = useState<any>(null);
+  const [selectedPack, setSelectedPack] = useState<Experiencia | null>(null);
   const [activeImg, setActiveImg] = useState<string | null>(null);
+  const [data, setData] = useState<Experiencia[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    fetch("/api/expediciones")
+      .then((r) => r.json())
+      .then((rows) => {
+        if (!Array.isArray(rows)) {
+          setData([]);
+          setLoading(false);
+          return;
+        }
+        const mapped: Experiencia[] = rows.map((e: any) => ({
+          id: String(e.id),
+          title: String(e.title),
+          category: String(e.category),
+          description: String(e.description),
+          price: e.price && Number(e.price) > 0 ? Number(e.price) : -1,
+          image: String(e.image),
+          gallery: e.gallery
+            ? e.gallery.split(",").map((s: string) => s.trim())
+            : [String(e.image)],
+        }));
+        setData(mapped);
+        setLoading(false);
+      })
+      .catch(() => {
+        setData([]);
+        setLoading(false);
+      });
+  }, []);
 
   const formatPrice = (value: unknown) => {
-    if (typeof value !== "number" || !Number.isFinite(value)) return null;
+    if (typeof value !== "number" || !Number.isFinite(value) || value === -1) return null;
     return new Intl.NumberFormat("es-AR").format(value);
   };
 
@@ -30,11 +73,60 @@ export const ExperienceGrid = () => {
     }
   }, [selectedPack]);
 
+  if (!mounted) return null;
+  if (loading) {
+    return (
+      <section className="py-24 px-6 w-full">
+        <div className="flex justify-center items-center min-h-[400px]">
+          <div className="text-zinc-500 text-sm">Cargando expediciones...</div>
+        </div>
+      </section>
+    );
+  }
+  if (data.length === 0) {
+    return (
+      <section className="py-24 px-6 w-full">
+        <div className="max-w-4xl mx-auto text-center space-y-8">
+          <div className="space-y-4">
+            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white leading-none">
+              Próximamente
+            </h2>
+            <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
+              Estamos preparando experiencias únicas en el Delta. Muy pronto podrás descubrir nuestras expediciones exclusivas.
+            </p>
+          </div>
+          
+          <div className="flex justify-center">
+            <a 
+              href={JON_CONTACT.getWhatsAppLink("Hola! Me interesa conocer las futuras expediciones de Jonco.")}
+              target="_blank"
+              className="bg-white text-black px-8 py-4 rounded-full font-black uppercase tracking-widest text-[10px] hover:bg-gold transition-all active:scale-95"
+            >
+              Consultar por Novedades
+            </a>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+            {["Experiencias Exclusivas", "Navegación Privada", "Conexión con la Naturaleza"].map((title, i) => (
+              <div key={i} className="text-center space-y-3">
+                <div className="w-16 h-16 mx-auto bg-gold/20 rounded-full flex items-center justify-center">
+                  <div className="w-8 h-8 bg-gold rounded-full" />
+                </div>
+                <h3 className="text-white font-black text-sm uppercase tracking-wider">{title}</h3>
+                <p className="text-zinc-500 text-sm">Descubre el Delta desde una perspectiva única y sofisticada.</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-24 px-6 w-full">
       {/* GRID DE CARDS PRINCIPAL */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-        {EXPERIENCIAS.map((tour) => (
+        {data.map((tour) => (
           <motion.div
             key={tour.id}
             initial={{ opacity: 0, y: 20 }}
@@ -189,7 +281,11 @@ export const ExperienceGrid = () => {
                   {/* BOTONES DE ACCIÓN */}
                   <div className="flex flex-col gap-4">
                     <a 
-                      href={`https://wa.me/5491140765354?text=Hola! Me interesa el pack: ${selectedPack.title}.`}
+                      href={JON_CONTACT.getWhatsAppLink(formatReservaMessage({
+                        title: selectedPack.title,
+                        category: selectedPack.category,
+                        price: selectedPack.price
+                      }))}
                       target="_blank"
                       className="w-full bg-white text-black text-center py-5 rounded-full font-black uppercase tracking-[0.2em] text-[10px] hover:bg-gold transition-all active:scale-95"
                     >

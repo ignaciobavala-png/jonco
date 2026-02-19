@@ -1,8 +1,30 @@
 "use client";
 import { motion } from "framer-motion";
 import { JON_CONTACT } from "@/lib/constants";
+import { useState, useEffect } from "react";
 
 export const Hero = () => {
+  const [heroVideoUrl, setHeroVideoUrl] = useState("https://v.ftcdn.net/05/52/15/28/700_F_552152862_9YI8Mv3m3r3uYy4rN9w6PqE5l6Mv6f0P_ST.mp4");
+
+  useEffect(() => {
+    const fetchHeroVideo = async () => {
+      try {
+        const res = await fetch("/api/configuracion");
+        if (res.ok) {
+          const config = await res.json();
+          const heroConfig = config.find((c: any) => c.clave === "hero_video_url");
+          if (heroConfig?.valor) {
+            setHeroVideoUrl(heroConfig.valor);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch hero video URL:", error);
+        // Keep default URL on error
+      }
+    };
+
+    fetchHeroVideo();
+  }, []);
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
     if (section) {
@@ -22,7 +44,7 @@ export const Hero = () => {
           className="h-full w-full object-cover brightness-[0.6]"
           poster="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070"
         >
-          <source src="https://v.ftcdn.net/05/52/15/28/700_F_552152862_9YI8Mv3m3r3uYy4rN9w6PqE5l6Mv6f0P_ST.mp4" type="video/mp4" />
+          <source src={heroVideoUrl} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent bg-gradient-to-t from-black/60 via-transparent to-transparent" />
       </div>

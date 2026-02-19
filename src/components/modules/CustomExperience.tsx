@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { JON_CONTACT } from "@/lib/constants";
+import { JON_CONTACT, formatExpedicionPersonalizadaMessage } from "@/lib/constants";
 
 type FormState = {
   destino: string;
@@ -45,23 +45,13 @@ export const CustomExperience = () => {
   const hasErrors = Object.values(errors).some(Boolean);
 
   const buildMessage = () => {
-    const destino = form.destino.trim();
-    const fechas = form.fechas.trim();
-    const pasajeros = String(form.pasajeros ?? "");
-    const presupuesto = String(form.presupuesto ?? "");
-    const notas = form.notas.trim();
-
-    const lines = [
-      "*NUEVA SOLICITUD DE EXPEDICIÓN PERSONALIZADA*",
-      "--------------------------------------",
-      `DESTINO: ${destino}`,
-      `FECHAS: ${fechas}`,
-      `PASAJEROS: ${pasajeros}`,
-      `PRESUPUESTO: U$D ${presupuesto} / pax`,
-      `NOTAS: ${notas}`,
-    ];
-
-    return lines.join("\n");
+    return formatExpedicionPersonalizadaMessage({
+      destino: form.destino.trim(),
+      fechas: form.fechas.trim(),
+      pasajeros: form.pasajeros!,
+      presupuesto: form.presupuesto!,
+      notas: form.notas.trim(),
+    });
   };
 
   const submit = () => {

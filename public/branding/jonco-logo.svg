@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Delta shape: three nested triangular wave lines suggesting a river delta from above -->
+  <!-- Outer delta arm - left -->
+  <path
+    d="M 50 12 L 10 82"
+    stroke="#D4AF37"
+    stroke-width="3.5"
+    stroke-linecap="round"
+  />
+  <!-- Outer delta arm - right -->
+  <path
+    d="M 50 12 L 90 82"
+    stroke="#D4AF37"
+    stroke-width="3.5"
+    stroke-linecap="round"
+  />
+  <!-- Middle delta arm - splits left -->
+  <path
+    d="M 50 38 L 28 82"
+    stroke="#D4AF37"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    opacity="0.75"
+  />
+  <!-- Middle delta arm - splits right -->
+  <path
+    d="M 50 38 L 72 82"
+    stroke="#D4AF37"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    opacity="0.75"
+  />
+  <!-- Inner delta arm - center -->
+  <path
+    d="M 50 58 L 50 82"
+    stroke="#D4AF37"
+    stroke-width="1.8"
+    stroke-linecap="round"
+    opacity="0.5"
+  />
+  <!-- Source dot - origin of the river -->
+  <circle cx="50" cy="12" r="3" fill="#D4AF37" />
+</svg>
