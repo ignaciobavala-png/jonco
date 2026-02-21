@@ -26,29 +26,29 @@ export interface ExpedicionPersonalizadaData {
 }
 
 export const formatReservaMessage = (data: ReservaData): string => {
-  return `🏔️ *RESERVA DE EXPEDICIÓN*
+  return `*RESERVA DE EXPEDICION*
 
-📍 *Expedición:* ${data.title}
-🏷️ *Categoría:* ${data.category}
-💰 *Precio:* $${data.price.toLocaleString('es-AR')}/pax
+* *Expedicion:* ${data.title}
+* *Categoria:* ${data.category}
+* *Precio:* $${data.price.toLocaleString('es-AR')}/pax
 
-━━━━━━━━━━━━━━━━━━━
+-------------------
 
-Hola! Me interesa reservar esta expedición. ¿Hay disponibilidad para las próximas fechas?`;
+Hola! Me interesa reservar esta expedicion. Hay disponibilidad para las proximas fechas?`;
 };
 
 export const formatExpedicionPersonalizadaMessage = (data: ExpedicionPersonalizadaData): string => {
-  return `✨ *EXPEDICIÓN PERSONALIZADA*
+  return `*EXPEDICION PERSONALIZADA*
 
-📍 *Destino:* ${data.destino}
-📅 *Fechas:* ${data.fechas}
-👥 *Pasajeros:* ${data.pasajeros} personas
-💵 *Presupuesto:* $${data.presupuesto.toLocaleString('es-AR')}/pax
+* *Destino:* ${data.destino}
+* *Fechas:* ${data.fechas}
+* *Pasajeros:* ${data.pasajeros} personas
+* *Presupuesto:* $${data.presupuesto.toLocaleString('es-AR')}/pax
 
-━━━━━━━━━━━━━━━━━━━
+-------------------
 
-💬 *Detalles adicionales:*
+* *Detalles adicionales:*
 ${data.notas}
 
-¿Es posible organizar una expedición con estas características?`;
+Es posible organizar una expedicion con estas caracteristicas?`;
 };
