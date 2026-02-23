@@ -77,49 +77,54 @@ export default function ImageUploader({
     setUploadProgress(0);
 
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('folder', folder);
+      // Paso 1: pedir URL firmada a Next.js (solo metadata, sin el archivo)
+      const metaRes = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ folder, filename: file.name, contentType: file.type }),
+      });
 
+      const metaData = await metaRes.json();
+
+      if (!metaRes.ok) {
+        setError(metaData.error || 'Error al preparar la subida');
+        setIsUploading(false);
+        return;
+      }
+
+      const { signedUrl, publicUrl } = metaData;
+
+      // Paso 2: subir el archivo DIRECTAMENTE a Supabase (bypassa Next.js → no hay 413)
       const xhr = new XMLHttpRequest();
-      
-      // Track upload progress
+
       xhr.upload.addEventListener('progress', (e) => {
         if (e.lengthComputable) {
-          const progress = Math.round((e.loaded / e.total) * 100);
-          setUploadProgress(progress);
+          setUploadProgress(Math.round((e.loaded / e.total) * 100));
         }
       });
 
-      // Handle completion
       xhr.addEventListener('load', () => {
-        if (xhr.status === 200) {
-          const response = JSON.parse(xhr.responseText);
-          if (response.success) {
-            setPreview(response.url);
-            onUpload(response.url);
-            setUploadProgress(100);
-          } else {
-            setError(response.error || 'Upload failed');
-          }
+        if (xhr.status >= 200 && xhr.status < 300) {
+          setPreview(publicUrl);
+          onUpload(publicUrl);
+          setUploadProgress(100);
         } else {
-          setError('Upload failed');
+          setError('Error al subir el archivo a Storage');
         }
         setIsUploading(false);
       });
 
-      // Handle error
       xhr.addEventListener('error', () => {
-        setError('Upload failed');
+        setError('Error de conexión al subir el archivo');
         setIsUploading(false);
       });
 
-      // Send request
-      xhr.open('POST', '/api/upload');
-      xhr.send(formData);
+      xhr.open('PUT', signedUrl);
+      xhr.setRequestHeader('Content-Type', file.type);
+      xhr.send(file);
 
     } catch (err) {
-      setError('Upload failed');
+      setError('Error inesperado al subir el archivo');
       setIsUploading(false);
     }
   };
