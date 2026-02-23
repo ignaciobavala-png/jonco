@@ -9,7 +9,7 @@ export const Hero = () => {
   useEffect(() => {
     const fetchHeroVideo = async () => {
       try {
-        const res = await fetch("/api/configuracion");
+        const res = await fetch("/api/configuracion", { cache: "no-store" });
         if (res.ok) {
           const config = await res.json();
           const heroConfig = config.find((c: any) => c.clave === "hero_video_url");
@@ -19,11 +19,17 @@ export const Hero = () => {
         }
       } catch (error) {
         console.error("Failed to fetch hero video URL:", error);
-        // Keep default URL on error
       }
     };
 
     fetchHeroVideo();
+
+    // Re-fetch cuando el usuario vuelve a esta tab (ej: después de subir desde el admin)
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") fetchHeroVideo();
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
   }, []);
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
