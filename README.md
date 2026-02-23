@@ -1,36 +1,168 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Jonco — Turismo Náutico en el Delta
 
-## Getting Started
+Landing page + panel de administración para **Jonco Turismo**, servicio de expediciones náuticas privadas en el Delta del Tigre, Buenos Aires.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Stack
+
+| Capa | Tecnología |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Lenguaje | TypeScript 5 |
+| Estilos | Tailwind CSS v4 |
+| Animaciones | Framer Motion 12 |
+| Base de datos | Supabase (PostgreSQL) |
+| Storage | Supabase Storage (`jonco-photos`) |
+| Estado global | Zustand |
+| Runtime | React 19 |
+
+---
+
+## Estructura del proyecto
+
+```
+src/
+├── app/
+│   ├── page.tsx                  # Landing principal (one-page)
+│   ├── layout.tsx
+│   ├── globals.css               # Variables CSS + Tailwind
+│   ├── joncoadm/                 # Panel de administración
+│   └── api/
+│       ├── expediciones/         # CRUD de expediciones
+│       ├── configuracion/        # Configuración del sitio
+│       ├── contacto/             # Datos de contacto
+│       ├── horarios/             # Horarios por expedición
+│       └── upload/               # Upload de archivos a Storage
+├── components/
+│   ├── modules/
+│   │   ├── Hero.tsx              # Video fullscreen + CTA
+│   │   ├── ExperienceGrid.tsx    # Grid de expediciones + modal
+│   │   ├── ClientFeedback.tsx    # Carousel de testimonios
+│   │   └── CustomExperience.tsx  # Formulario de exp. personalizada
+│   ├── shared/
+│   │   ├── Navbar.tsx
+│   │   ├── Footer.tsx
+│   │   └── RootShell.tsx
+│   └── admin/
+│       ├── ExpedicionesManager.tsx
+│       ├── ContactoManager.tsx
+│       ├── ConfiguracionManager.tsx
+│       └── ImageUploader.tsx
+└── lib/
+    ├── constants.ts              # Contacto + templates WhatsApp
+    └── schema.sql                # Referencia de schema (legacy)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Secciones de la landing
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Hero** — video de fondo configurable desde el admin, dos CTAs principales
+2. **Historia** — texto del Capitán Jonco con tipografía manuscrita (Caveat)
+3. **Expediciones** — cards dinámicas desde Supabase; modal inmersivo con galería, precio y reserva por WhatsApp
+4. **Feedback** — carousel de testimonios de clientes
+5. **Experiencia personalizada** — formulario que genera un mensaje pre-formateado y abre WhatsApp
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Panel de administración
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Accesible en `/joncoadm`. Sin autenticación (acceso por URL directa).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Tabs disponibles:**
+- **Expediciones** — CRUD completo: título, categoría, descripción, precio, imagen, galería
+- **Contacto** — teléfono, email, Instagram, mensaje WhatsApp por defecto
+- **Configuración** — URL del video del hero (con uploader directo a Supabase Storage)
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Variables de entorno
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Crear un archivo `.env` en la raíz con:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://<proyecto>.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon-key>
+SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
+```
+
+> `SUPABASE_SERVICE_ROLE_KEY` es necesaria para el upload de archivos (Storage).
+
+---
+
+## Supabase — tablas requeridas
+
+### `expediciones`
+| columna | tipo |
+|---|---|
+| id | int (PK, autoincrement) |
+| title | text |
+| category | text |
+| description | text |
+| price | int (nullable) |
+| image | text |
+| gallery | text (URLs separadas por coma) |
+| activo | int (0/1) |
+
+### `horarios`
+| columna | tipo |
+|---|---|
+| id | int (PK) |
+| expedicion_id | int (FK → expediciones) |
+| dias | text |
+| hora_salida | text |
+| hora_regreso | text |
+| cupos | int |
+| activo | int |
+
+### `contacto`
+| columna | tipo |
+|---|---|
+| clave | text (PK) |
+| valor | text |
+
+### `configuracion`
+| columna | tipo |
+|---|---|
+| clave | text (PK) |
+| valor | text |
+| descripcion | text |
+| updated_at | timestamp |
+
+**Row requerida:** `hero_video_url` con `valor` vacío o una URL de video válida.
+
+---
+
+## Supabase Storage
+
+Bucket: **`jonco-photos`** (público).
+
+Estructura de carpetas dentro del bucket:
+```
+jonco-photos/
+├── configuracion/
+│   └── videos/       # Video del hero
+└── expediciones/
+    └── images/       # Imágenes de expediciones
+```
+
+---
+
+## Desarrollo local
+
+```bash
+npm install
+npm run dev
+```
+
+Abre [http://localhost:3000](http://localhost:3000) para la landing.
+Panel de admin: [http://localhost:3000/joncoadm](http://localhost:3000/joncoadm)
+
+---
+
+## Contacto
+
+**Jonco Turismo** — Tigre, Buenos Aires, Argentina
+WhatsApp / Reservas: +54 9 11 4076-5354
+Instagram: [@joncoexperience](https://instagram.com/joncoexperience)

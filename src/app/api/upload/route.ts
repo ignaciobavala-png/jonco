@@ -73,104 +73,32 @@ export async function POST(request: NextRequest) {
     const fileExtension = file.type.split('/')[1];
     
     const isVideo = file.type.startsWith("video/");
-    
+
     if (isVideo) {
-      // Handle video upload with thumbnail generation
-      try {
-        // Extract first frame as WebP thumbnail
-        const webpThumbnail = await sharp(buffer, { pages: 1 })
-          .webp({ quality: 82, effort: 4 })
-          .resize(1920, 1080, { fit: "inside", withoutEnlargement: true })
-          .toBuffer();
-        
-        // Upload thumbnail
-        const thumbFilename = `${originalName}-${timestamp}-thumb.webp`;
-        const thumbPath = `${folder}/thumbs/${thumbFilename}`;
-        
-        const { error: thumbError } = await supabase.storage
-          .from("jonco-photos")
-          .upload(thumbPath, webpThumbnail, {
-            contentType: "image/webp",
-            cacheControl: "3600",
-          });
-        
-        if (thumbError) {
-          console.error('Thumbnail upload error:', thumbError);
-          return NextResponse.json(
-            { error: 'Failed to upload thumbnail' },
-            { status: 500 }
-          );
-        }
-        
-        // Upload original video
-        const videoFilename = `${originalName}-${timestamp}.${fileExtension}`;
-        const videoPath = `${folder}/videos/${videoFilename}`;
-        
-        const { error: videoError } = await supabase.storage
-          .from("jonco-photos")
-          .upload(videoPath, buffer, {
-            contentType: file.type,
-            cacheControl: "3600",
-          });
-        
-        if (videoError) {
-          console.error('Video upload error:', videoError);
-          return NextResponse.json(
-            { error: 'Failed to upload video' },
-            { status: 500 }
-          );
-        }
-        
-        // Get public URLs
-        const { data: thumbUrlData } = supabase.storage
-          .from("jonco-photos")
-          .getPublicUrl(thumbPath);
-        
-        const { data: videoUrlData } = supabase.storage
-          .from("jonco-photos")
-          .getPublicUrl(videoPath);
-        
-        return NextResponse.json({
-          success: true,
-          videoUrl: videoUrlData.publicUrl,
-          thumbnailUrl: thumbUrlData.publicUrl,
-          type: 'video'
+      const videoFilename = `${originalName}-${timestamp}.${fileExtension}`;
+      const videoPath = `${folder}/videos/${videoFilename}`;
+
+      const { error: videoError } = await supabase.storage
+        .from("jonco-photos")
+        .upload(videoPath, buffer, {
+          contentType: file.type,
+          cacheControl: "3600",
         });
-        
-      } catch (sharpError) {
-        console.error('Sharp video processing error:', sharpError);
-        
-        // Fallback: upload video without thumbnail
-        const videoFilename = `${originalName}-${timestamp}.${fileExtension}`;
-        const videoPath = `${folder}/videos/${videoFilename}`;
-        
-        const { error: videoError } = await supabase.storage
-          .from("jonco-photos")
-          .upload(videoPath, buffer, {
-            contentType: file.type,
-            cacheControl: "3600",
-          });
-        
-        if (videoError) {
-          console.error('Video upload error:', videoError);
-          return NextResponse.json(
-            { error: 'Failed to upload video' },
-            { status: 500 }
-          );
-        }
-        
-        const { data: videoUrlData } = supabase.storage
-          .from("jonco-photos")
-          .getPublicUrl(videoPath);
-        
-        return NextResponse.json({
-          success: true,
-          videoUrl: videoUrlData.publicUrl,
-          type: 'video',
-          warning: 'Thumbnail generation failed, video uploaded without thumbnail'
-        });
+
+      if (videoError) {
+        console.error('Video upload error:', videoError);
+        return NextResponse.json(
+          { error: 'Failed to upload video' },
+          { status: 500 }
+        );
       }
-      
+
+      const { data: videoUrlData } = supabase.storage
+        .from("jonco-photos")
+        .getPublicUrl(videoPath);
+
+      return NextResponse.json({ success: true, url: videoUrlData.publicUrl });
+
     } else {
       // Handle image processing (existing logic)
       const processedBuffer = await sharp(buffer)
