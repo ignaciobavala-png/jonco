@@ -10,6 +10,7 @@ export const Hero = () => {
   // null      = sin video configurado (mostrar poster)
   // string    = url del video
   const [heroVideoUrl, setHeroVideoUrl] = useState<string | null | undefined>(undefined);
+  const [videoReady, setVideoReady] = useState(false);
 
   useEffect(() => {
     const fetchHeroVideo = async () => {
@@ -18,7 +19,9 @@ export const Hero = () => {
         if (res.ok) {
           const config = await res.json();
           const heroConfig = config.find((c: any) => c.clave === "hero_video_url");
-          setHeroVideoUrl(heroConfig?.valor || null);
+          const newUrl = heroConfig?.valor || null;
+          if (newUrl !== heroVideoUrl) setVideoReady(false);
+          setHeroVideoUrl(newUrl);
         } else {
           setHeroVideoUrl(null);
         }
@@ -55,8 +58,8 @@ export const Hero = () => {
             muted
             loop
             playsInline
-            className="h-full w-full object-cover brightness-[0.6]"
-            poster={POSTER}
+            onCanPlay={() => setVideoReady(true)}
+            className={`h-full w-full object-cover brightness-[0.6] transition-opacity duration-700 ${videoReady ? "opacity-100" : "opacity-0"}`}
           >
             <source src={heroVideoUrl} type="video/mp4" />
           </video>
