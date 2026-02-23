@@ -43,6 +43,7 @@ export const Hero = () => {
       {/* Background Layer */}
       <div className="absolute inset-0 z-0">
         <video
+          key={heroVideoUrl}
           autoPlay
           muted
           loop
