@@ -6,7 +6,10 @@ import { useState, useEffect } from "react";
 const POSTER = "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070";
 
 export const Hero = () => {
-  const [heroVideoUrl, setHeroVideoUrl] = useState<string | null>(null);
+  // undefined = todavía cargando (no mostrar nada)
+  // null      = sin video configurado (mostrar poster)
+  // string    = url del video
+  const [heroVideoUrl, setHeroVideoUrl] = useState<string | null | undefined>(undefined);
 
   useEffect(() => {
     const fetchHeroVideo = async () => {
@@ -15,12 +18,13 @@ export const Hero = () => {
         if (res.ok) {
           const config = await res.json();
           const heroConfig = config.find((c: any) => c.clave === "hero_video_url");
-          if (heroConfig?.valor) {
-            setHeroVideoUrl(heroConfig.valor);
-          }
+          setHeroVideoUrl(heroConfig?.valor || null);
+        } else {
+          setHeroVideoUrl(null);
         }
       } catch (error) {
         console.error("Failed to fetch hero video URL:", error);
+        setHeroVideoUrl(null);
       }
     };
 
@@ -41,10 +45,10 @@ export const Hero = () => {
   };
 
   return (
-    <section className="relative h-screen w-full overflow-hidden flex items-end justify-start">
+    <section className="relative h-screen w-full overflow-hidden flex items-end justify-start bg-black">
       {/* Background Layer */}
       <div className="absolute inset-0 z-0">
-        {heroVideoUrl ? (
+        {heroVideoUrl === undefined ? null : heroVideoUrl ? (
           <video
             key={heroVideoUrl}
             autoPlay

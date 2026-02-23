@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Testimonial = {
+  id?: number;
   name: string;
   location: string;
   text: string;
@@ -11,7 +12,7 @@ type Testimonial = {
   date: string;
 };
 
-const TESTIMONIALS: Testimonial[] = [
+const FALLBACK: Testimonial[] = [
   {
     name: "Sofía R.",
     location: "CABA",
@@ -38,7 +39,15 @@ const TESTIMONIALS: Testimonial[] = [
 const AUTOPLAY_DELAY = 5000;
 
 export const ClientFeedback = () => {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(FALLBACK);
   const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    fetch("/api/testimonios", { cache: "no-store" })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (Array.isArray(data) && data.length > 0) setTestimonials(data); })
+      .catch(() => {});
+  }, []);
   const [direction, setDirection] = useState<1 | -1>(1);
   const [paused, setPaused] = useState(false);
   const dragStartX = useRef<number | null>(null);
@@ -48,8 +57,8 @@ export const ClientFeedback = () => {
     setCurrent(index);
   };
 
-  const next = () => goTo((current + 1) % TESTIMONIALS.length, 1);
-  const prev = () => goTo((current - 1 + TESTIMONIALS.length) % TESTIMONIALS.length, -1);
+  const next = () => goTo((current + 1) % testimonials.length, 1);
+  const prev = () => goTo((current - 1 + testimonials.length) % testimonials.length, -1);
 
   useEffect(() => {
     if (paused) return;
@@ -89,7 +98,7 @@ export const ClientFeedback = () => {
     exit: (dir: number) => ({ x: dir > 0 ? -80 : 80, opacity: 0 }),
   };
 
-  const t = TESTIMONIALS[current];
+  const t = testimonials[current] ?? testimonials[0];
 
   return (
     <section className="relative z-10 bg-black py-20 sm:py-24 px-6">
@@ -143,7 +152,7 @@ export const ClientFeedback = () => {
 
         <div className="flex items-center justify-between mt-8 px-2">
           <div className="flex items-center gap-2">
-            {TESTIMONIALS.map((_, i) => (
+            {testimonials.map((_, i) => (
               <button
                 key={i}
                 onClick={() => goTo(i, i > current ? 1 : -1)}
@@ -154,7 +163,7 @@ export const ClientFeedback = () => {
             ))}
           </div>
           <span className="text-white/20 text-[10px] uppercase tracking-widest font-black">
-            {current + 1} / {TESTIMONIALS.length}
+            {current + 1} / {testimonials.length}
           </span>
         </div>
 
