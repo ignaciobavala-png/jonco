@@ -3,8 +3,10 @@ import { motion } from "framer-motion";
 import { JON_CONTACT } from "@/lib/constants";
 import { useState, useEffect } from "react";
 
+const POSTER = "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070";
+
 export const Hero = () => {
-  const [heroVideoUrl, setHeroVideoUrl] = useState("https://v.ftcdn.net/05/52/15/28/700_F_552152862_9YI8Mv3m3r3uYy4rN9w6PqE5l6Mv6f0P_ST.mp4");
+  const [heroVideoUrl, setHeroVideoUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchHeroVideo = async () => {
@@ -42,17 +44,25 @@ export const Hero = () => {
     <section className="relative h-screen w-full overflow-hidden flex items-end justify-start">
       {/* Background Layer */}
       <div className="absolute inset-0 z-0">
-        <video
-          key={heroVideoUrl}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="h-full w-full object-cover brightness-[0.6]"
-          poster="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070"
-        >
-          <source src={heroVideoUrl} type="video/mp4" />
-        </video>
+        {heroVideoUrl ? (
+          <video
+            key={heroVideoUrl}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="h-full w-full object-cover brightness-[0.6]"
+            poster={POSTER}
+          >
+            <source src={heroVideoUrl} type="video/mp4" />
+          </video>
+        ) : (
+          <img
+            src={POSTER}
+            alt=""
+            className="h-full w-full object-cover brightness-[0.6]"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent bg-gradient-to-t from-black/60 via-transparent to-transparent" />
       </div>
 
