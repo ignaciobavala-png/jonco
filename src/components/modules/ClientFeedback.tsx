@@ -101,7 +101,7 @@ export const ClientFeedback = () => {
   const t = testimonials[current] ?? testimonials[0];
 
   return (
-    <section className="relative z-10 bg-black py-20 sm:py-24 px-6">
+    <section className="relative z-10 bg-zinc-950 py-20 sm:py-24 px-6">
       <div className="max-w-3xl mx-auto">
         <div className="mb-12 space-y-4">
           <span className="text-gold text-[8px] sm:text-[10px] font-black uppercase tracking-[0.5em] block opacity-60">

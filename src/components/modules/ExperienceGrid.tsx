@@ -137,10 +137,10 @@ export const ExperienceGrid = () => {
           >
             <img 
               src={tour.image} 
-              className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-1000" 
+              className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000"
               alt={tour.title} 
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
             
             <div className="absolute top-6 right-6">
               <span className="bg-black/50 backdrop-blur-md text-white text-[10px] px-3 py-1 rounded-full border border-white/10 font-bold uppercase tracking-widest">

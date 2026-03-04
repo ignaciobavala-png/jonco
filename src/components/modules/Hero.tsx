@@ -1,9 +1,18 @@
 "use client";
 import { motion } from "framer-motion";
 import { JON_CONTACT } from "@/lib/constants";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const POSTER = "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070";
+
+const DEFAULTS = {
+  hero_label: "",
+  hero_titulo: "",
+  hero_titulo_accent: "",
+  hero_subtitulo: "",
+};
+
+type HeroTextData = typeof DEFAULTS;
 
 export const Hero = () => {
   // undefined = todavía cargando (no mostrar nada)
@@ -11,6 +20,8 @@ export const Hero = () => {
   // string    = url del video
   const [heroVideoUrl, setHeroVideoUrl] = useState<string | null | undefined>(undefined);
   const [videoReady, setVideoReady] = useState(false);
+  const [textData, setTextData] = useState<HeroTextData>(DEFAULTS);
+  const heroVideoUrlRef = useRef<string | null | undefined>(undefined);
 
   useEffect(() => {
     const fetchHeroVideo = async () => {
@@ -20,8 +31,19 @@ export const Hero = () => {
           const config = await res.json();
           const heroConfig = config.find((c: any) => c.clave === "hero_video_url");
           const newUrl = heroConfig?.valor || null;
-          if (newUrl !== heroVideoUrl) setVideoReady(false);
+          if (newUrl !== heroVideoUrlRef.current) {
+            setVideoReady(false);
+            heroVideoUrlRef.current = newUrl;
+          }
           setHeroVideoUrl(newUrl);
+          const get = (clave: keyof HeroTextData) =>
+            config.find((c: any) => c.clave === clave)?.valor || DEFAULTS[clave];
+          setTextData({
+            hero_label: get("hero_label"),
+            hero_titulo: get("hero_titulo"),
+            hero_titulo_accent: get("hero_titulo_accent"),
+            hero_subtitulo: get("hero_subtitulo"),
+          });
         } else {
           setHeroVideoUrl(null);
         }
@@ -59,7 +81,7 @@ export const Hero = () => {
             loop
             playsInline
             onCanPlay={() => setVideoReady(true)}
-            className={`h-full w-full object-cover brightness-[0.6] transition-opacity duration-700 ${videoReady ? "opacity-100" : "opacity-0"}`}
+            className={`h-full w-full object-cover brightness-[0.75] transition-opacity duration-700 ${videoReady ? "opacity-100" : "opacity-0"}`}
           >
             <source src={heroVideoUrl} type="video/mp4" />
           </video>
@@ -67,11 +89,11 @@ export const Hero = () => {
           <img
             src={POSTER}
             alt=""
-            className="h-full w-full object-cover brightness-[0.6]"
+            className="h-full w-full object-cover brightness-[0.75]"
           />
         )}
-        <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/30 to-transparent" />
-        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent" />
       </div>
 
       {/* Contenido principal */}
@@ -82,18 +104,26 @@ export const Hero = () => {
           transition={{ duration: 1 }}
           className="space-y-4 sm:space-y-6"
         >
-          <span className="text-gold-light uppercase text-[8px] sm:text-[10px] tracking-[0.5em] font-bold block opacity-90 drop-shadow-gold">
-            Jonco Turismo
-          </span>
-          
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tighter text-white leading-tight uppercase">
-            Navegá la <br className="hidden sm:block" />
-            <span className="font-black text-gold-bright drop-shadow-lg">Exclusividad</span>
-          </h1>
+          {textData.hero_label && (
+            <span className="text-gold-light uppercase text-[8px] sm:text-[10px] tracking-[0.5em] font-bold block opacity-90 drop-shadow-gold">
+              {textData.hero_label}
+            </span>
+          )}
 
-          <p className="text-zinc-200 text-sm sm:text-base md:text-lg max-w-md font-light leading-relaxed border-l border-gold/50 pl-4 sm:pl-6 drop-shadow-md">
-            Experiencias privadas diseñadas para quienes buscan descubrir el Delta desde una perspectiva única y sofisticada.
-          </p>
+          {(textData.hero_titulo || textData.hero_titulo_accent) && (
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tighter text-white leading-tight uppercase">
+              {textData.hero_titulo && <>{textData.hero_titulo}<br className="hidden sm:block" /></>}
+              {textData.hero_titulo_accent && (
+                <span className="font-black text-gold-bright drop-shadow-lg">{textData.hero_titulo_accent}</span>
+              )}
+            </h1>
+          )}
+
+          {textData.hero_subtitulo && (
+            <p className="text-zinc-200 text-sm sm:text-base md:text-lg max-w-md font-light leading-relaxed border-l border-gold/50 pl-4 sm:pl-6 drop-shadow-md">
+              {textData.hero_subtitulo}
+            </p>
+          )}
 
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
             <button 

@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -42,6 +43,11 @@ body {
 .font-signature {
   font-family: 'Caveat', cursive;
   font-weight: 700;
+}
+
+/* Tipografía Serif Elegante */
+.font-cormorant {
+  font-family: 'Cormorant Garamond', Georgia, serif;
 }
 
 /* Utilidades para scroll suave */

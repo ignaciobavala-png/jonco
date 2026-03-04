@@ -15,6 +15,12 @@ export const ConfiguracionManager = () => {
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
+  // Hero textos form state
+  const [heroLabel, setHeroLabel] = useState("");
+  const [heroTitulo, setHeroTitulo] = useState("");
+  const [heroTituloAccent, setHeroTituloAccent] = useState("");
+  const [heroSubtitulo, setHeroSubtitulo] = useState("");
+
   // Historia form state
   const [historiaCita, setHistoriaCita] = useState("");
   const [historiaParrafo1, setHistoriaParrafo1] = useState("");
@@ -37,6 +43,10 @@ export const ConfiguracionManager = () => {
       setHistoriaParrafo2(get("historia_parrafo_2"));
       setHistoriaFirma(get("historia_firma"));
       setHistoriaImagen(get("historia_imagen"));
+      setHeroLabel(get("hero_label"));
+      setHeroTitulo(get("hero_titulo"));
+      setHeroTituloAccent(get("hero_titulo_accent"));
+      setHeroSubtitulo(get("hero_subtitulo"));
     } catch {
       setError("No se pudo cargar la configuración. Verificá la conexión a la base de datos.");
     } finally {
@@ -58,6 +68,23 @@ export const ConfiguracionManager = () => {
       await load();
     } catch {
       alert("Error al guardar configuración. Intentá de nuevo.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const saveHeroTextos = async () => {
+    setSaving(true);
+    try {
+      await Promise.all([
+        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "hero_label", valor: heroLabel }) }),
+        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "hero_titulo", valor: heroTitulo }) }),
+        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "hero_titulo_accent", valor: heroTituloAccent }) }),
+        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "hero_subtitulo", valor: heroSubtitulo }) }),
+      ]);
+      await load();
+    } catch {
+      alert("Error al guardar los textos del Hero. Intentá de nuevo.");
     } finally {
       setSaving(false);
     }
@@ -136,6 +163,42 @@ export const ConfiguracionManager = () => {
                 Formatos soportados: MP4, MOV, WebM. Máximo 50MB.
               </p>
             </div>
+          </div>
+
+          {/* Textos Hero */}
+          <div className="pt-4 border-t border-white/5 space-y-4">
+            <div>
+              <label className="text-[10px] uppercase tracking-widest font-black text-white/40 block mb-2">
+                Label Superior
+              </label>
+              <input type="text" value={heroLabel} onChange={e => setHeroLabel(e.target.value)}
+                className="w-full bg-zinc-800 border border-white/10 rounded-lg px-4 py-3 text-white text-sm font-light focus:outline-none focus:border-white/30" />
+            </div>
+            <div>
+              <label className="text-[10px] uppercase tracking-widest font-black text-white/40 block mb-2">
+                Título Línea 1
+              </label>
+              <input type="text" value={heroTitulo} onChange={e => setHeroTitulo(e.target.value)}
+                className="w-full bg-zinc-800 border border-white/10 rounded-lg px-4 py-3 text-white text-sm font-light focus:outline-none focus:border-white/30" />
+            </div>
+            <div>
+              <label className="text-[10px] uppercase tracking-widest font-black text-white/40 block mb-2">
+                Título Destacado (dorado)
+              </label>
+              <input type="text" value={heroTituloAccent} onChange={e => setHeroTituloAccent(e.target.value)}
+                className="w-full bg-zinc-800 border border-white/10 rounded-lg px-4 py-3 text-white text-sm font-light focus:outline-none focus:border-white/30" />
+            </div>
+            <div>
+              <label className="text-[10px] uppercase tracking-widest font-black text-white/40 block mb-2">
+                Subtítulo
+              </label>
+              <textarea value={heroSubtitulo} onChange={e => setHeroSubtitulo(e.target.value)} rows={3}
+                className="w-full bg-zinc-800 border border-white/10 rounded-lg px-4 py-3 text-white text-sm font-light resize-none focus:outline-none focus:border-white/30" />
+            </div>
+            <button onClick={saveHeroTextos} disabled={saving}
+              className="w-full sm:w-auto bg-white text-black px-8 py-3 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-zinc-200 transition-colors disabled:opacity-40">
+              {saving ? "Guardando..." : "Guardar Textos Hero"}
+            </button>
           </div>
         </div>
 
