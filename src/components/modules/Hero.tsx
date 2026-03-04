@@ -94,6 +94,7 @@ export const Hero = () => {
         )}
         <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/30 to-transparent" />
         <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-zinc-950 to-transparent pointer-events-none" />
       </div>
 
       {/* Contenido principal */}

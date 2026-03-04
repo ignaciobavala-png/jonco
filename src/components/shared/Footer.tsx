@@ -153,7 +153,7 @@ export const Footer = () => {
         </motion.div>
 
         {/* Signature */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -164,6 +164,17 @@ export const Footer = () => {
             Capitán Jonco
           </div>
         </motion.div>
+
+        {/* Créditos */}
+        <div className="border-t border-white/5 pt-4 mt-4 text-center">
+          <p className="text-[10px] text-white/30">
+            Sitio desarrollado por{" "}
+            <a href="https://petralabs.xyz" target="_blank" rel="noopener noreferrer"
+              className="text-white/50 hover:text-white/80 transition-colors underline">
+              Petralabs
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );
