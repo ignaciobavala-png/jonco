@@ -88,7 +88,7 @@ export const Hero = () => {
         ) : (
           <img
             src={POSTER}
-            alt=""
+            alt="Paisaje natural del Delta del Paraná — Jonco Expediciones"
             className="h-full w-full object-cover brightness-[0.75]"
           />
         )}

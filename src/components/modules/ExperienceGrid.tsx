@@ -205,12 +205,13 @@ export const ExperienceGrid = () => {
               <div className="relative w-full lg:w-[55%] h-[40vh] sm:h-[50vh] lg:h-full overflow-hidden">
                 <AnimatePresence mode="wait">
                   {activeImg && (
-                    <motion.img 
+                    <motion.img
                       key={activeImg}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      src={activeImg} 
-                      className="w-full h-full object-cover" 
+                      src={activeImg}
+                      className="w-full h-full object-cover"
+                      alt={selectedPack.title}
                     />
                   )}
                 </AnimatePresence>
@@ -224,7 +225,7 @@ export const ExperienceGrid = () => {
                         activeImg === img ? 'ring-2 ring-gold scale-105' : 'opacity-40'
                       }`}
                     >
-                      <img src={img} className="w-full h-full object-cover" alt="" />
+                      <img src={img} className="w-full h-full object-cover" alt={`${selectedPack.title} — foto ${i + 1}`} />
                     </button>
                   ))}
                 </div>
