@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { JON_CONTACT, formatExpedicionPersonalizadaMessage } from "@/lib/constants";
+import { useTranslations } from "next-intl";
 
 type FormState = {
   destino: string;
@@ -20,6 +21,7 @@ const initialState: FormState = {
 };
 
 export const CustomExperience = () => {
+  const t = useTranslations("custom");
   const [form, setForm] = useState<FormState>(initialState);
   const [touched, setTouched] = useState<Record<keyof FormState, boolean>>({
     destino: false,
@@ -78,15 +80,15 @@ export const CustomExperience = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
           <div className="space-y-6">
             <span className="text-gold text-[8px] sm:text-[10px] font-black uppercase tracking-[0.5em] block opacity-60">
-              — Diseña tu propia expedición
+              {t("label")}
             </span>
 
             <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white leading-none italic">
-              Diseñá tu propia experiencia
+              {t("title")}
             </h2>
 
             <p className="text-zinc-400 text-sm sm:text-base lg:text-lg font-light leading-relaxed border-l border-white/5 pl-6">
-              Contame tu idea y armamos una ruta a medida. Minimalista, directa, sin vueltas.
+              {t("description")}
             </p>
           </div>
 
@@ -94,45 +96,45 @@ export const CustomExperience = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="sm:col-span-2">
                 <label className="text-[10px] uppercase tracking-widest font-black text-white/50 block mb-2">
-                  Destino deseado
+                  {t("destination_label")}
                 </label>
                 <input
                   value={form.destino}
                   onChange={(e) => setForm((s) => ({ ...s, destino: e.target.value }))}
                   onBlur={() => setTouched((t) => ({ ...t, destino: true }))}
                   className="w-full bg-zinc-800/40 text-white placeholder:text-white/20 border border-white/10 focus:border-gold focus:bg-zinc-800/60 outline-none py-3 px-4 rounded-lg transition-all"
-                  placeholder="Delta, Tigre, Uruguay, etc."
+                  placeholder={t("destination_placeholder")}
                   type="text"
                 />
                 {touched.destino && errors.destino ? (
                   <p className="mt-2 text-[10px] uppercase tracking-widest font-black text-red-500/80">
-                    Completar destino
+                    {t("error_destination")}
                   </p>
                 ) : null}
               </div>
 
               <div className="sm:col-span-2">
                 <label className="text-[10px] uppercase tracking-widest font-black text-white/50 block mb-2">
-                  Fechas estimadas
+                  {t("dates_label")}
                 </label>
                 <input
                   value={form.fechas}
                   onChange={(e) => setForm((s) => ({ ...s, fechas: e.target.value }))}
                   onBlur={() => setTouched((t) => ({ ...t, fechas: true }))}
                   className="w-full bg-zinc-800/40 text-white placeholder:text-white/20 border border-white/10 focus:border-gold focus:bg-zinc-800/60 outline-none py-3 px-4 rounded-lg transition-all"
-                  placeholder="Ej: 15-18 de marzo"
+                  placeholder={t("dates_placeholder")}
                   type="text"
                 />
                 {touched.fechas && errors.fechas ? (
                   <p className="mt-2 text-[10px] uppercase tracking-widest font-black text-red-500/80">
-                    Completar fechas
+                    {t("error_dates")}
                   </p>
                 ) : null}
               </div>
 
               <div>
                 <label className="text-[10px] uppercase tracking-widest font-black text-white/50 block mb-2">
-                  Pasajeros
+                  {t("passengers_label")}
                 </label>
                 <input
                   value={form.pasajeros ?? ""}
@@ -147,21 +149,21 @@ export const CustomExperience = () => {
                   }}
                   onBlur={() => setTouched((t) => ({ ...t, pasajeros: true }))}
                   className="w-full bg-zinc-800/40 text-white placeholder:text-white/20 border border-white/10 focus:border-gold focus:bg-zinc-800/60 outline-none py-3 px-4 rounded-lg transition-all"
-                  placeholder="Ej: 4"
+                  placeholder={t("passengers_placeholder")}
                   type="text"
                   inputMode="numeric"
                   pattern="\d*"
                 />
                 {touched.pasajeros && errors.pasajeros ? (
                   <p className="mt-2 text-[10px] uppercase tracking-widest font-black text-red-500/80">
-                    Completar pasajeros
+                    {t("error_passengers")}
                   </p>
                 ) : null}
               </div>
 
               <div>
                 <label className="text-[10px] uppercase tracking-widest font-black text-white/50 block mb-2">
-                  Presupuesto / persona
+                  {t("budget_label")}
                 </label>
                 <div className="flex items-end gap-3 border border-white/10 focus-within:border-gold bg-zinc-800/40 focus-within:bg-zinc-800/60 rounded-lg transition-all px-4">
                   <span className="pb-3 text-white/40 text-[10px] uppercase tracking-widest font-black">
@@ -180,8 +182,8 @@ export const CustomExperience = () => {
                     }}
                     onBlur={() => setTouched((t) => ({ ...t, presupuesto: true }))}
                     className="w-full bg-transparent text-white placeholder:text-white/20 outline-none py-3"
-                    placeholder="Ej: 120"
-                  style={{ backgroundColor: 'transparent' }}
+                    placeholder={t("budget_placeholder")}
+                    style={{ backgroundColor: "transparent" }}
                     type="text"
                     inputMode="numeric"
                     pattern="\d*"
@@ -189,25 +191,25 @@ export const CustomExperience = () => {
                 </div>
                 {touched.presupuesto && errors.presupuesto ? (
                   <p className="mt-2 text-[10px] uppercase tracking-widest font-black text-red-500/80">
-                    Completar presupuesto
+                    {t("error_budget")}
                   </p>
                 ) : null}
               </div>
 
               <div className="sm:col-span-2">
                 <label className="text-[10px] uppercase tracking-widest font-black text-white/50 block mb-2">
-                  Mensaje adicional
+                  {t("message_label")}
                 </label>
                 <textarea
                   value={form.notas}
                   onChange={(e) => setForm((s) => ({ ...s, notas: e.target.value }))}
                   onBlur={() => setTouched((t) => ({ ...t, notas: true }))}
                   className="w-full bg-zinc-800/40 text-white placeholder:text-white/20 border border-white/10 focus:border-gold focus:bg-zinc-800/60 outline-none py-3 px-4 rounded-lg transition-all resize-none min-h-[120px]"
-                  placeholder="Tipo de embarcación, nivel de aventura, preferencias, etc."
+                  placeholder={t("message_placeholder")}
                 />
                 {touched.notas && errors.notas ? (
                   <p className="mt-2 text-[10px] uppercase tracking-widest font-black text-red-500/80">
-                    Completar mensaje
+                    {t("error_message")}
                   </p>
                 ) : null}
               </div>
@@ -219,12 +221,12 @@ export const CustomExperience = () => {
                 onClick={submit}
                 className="w-full bg-white text-black text-center py-5 rounded-full font-black uppercase tracking-[0.2em] text-[10px] hover:bg-gold transition-all active:scale-95"
               >
-                Solicitar Cotización
+                {t("submit")}
               </button>
 
               {Object.values(touched).some(Boolean) && hasErrors ? (
                 <p className="mt-4 text-white/30 text-[10px] uppercase tracking-widest font-black text-center">
-                  Completá todos los campos para enviar.
+                  {t("fill_all")}
                 </p>
               ) : null}
             </div>

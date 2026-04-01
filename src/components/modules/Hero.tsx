@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { JON_CONTACT } from "@/lib/constants";
 import { useState, useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 
 const POSTER = "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070";
 
@@ -15,9 +16,7 @@ const DEFAULTS = {
 type HeroTextData = typeof DEFAULTS;
 
 export const Hero = () => {
-  // undefined = todavía cargando (no mostrar nada)
-  // null      = sin video configurado (mostrar poster)
-  // string    = url del video
+  const t = useTranslations("hero");
   const [heroVideoUrl, setHeroVideoUrl] = useState<string | null | undefined>(undefined);
   const [videoReady, setVideoReady] = useState(false);
   const [textData, setTextData] = useState<HeroTextData>(DEFAULTS);
@@ -55,17 +54,17 @@ export const Hero = () => {
 
     fetchHeroVideo();
 
-    // Re-fetch cuando el usuario vuelve a esta tab (ej: después de subir desde el admin)
     const handleVisibility = () => {
       if (document.visibilityState === "visible") fetchHeroVideo();
     };
     document.addEventListener("visibilitychange", handleVisibility);
     return () => document.removeEventListener("visibilitychange", handleVisibility);
   }, []);
+
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
     if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
+      section.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -127,18 +126,18 @@ export const Hero = () => {
           )}
 
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
-            <button 
-              onClick={() => scrollToSection('experiencias')}
+            <button
+              onClick={() => scrollToSection("experiencias")}
               className="bg-white text-black px-6 sm:px-8 py-3 sm:py-3.5 rounded-full font-bold text-[10px] sm:text-xs uppercase tracking-widest hover:bg-gold-light transition-all active:scale-95 w-full sm:w-auto shadow-lg hover:shadow-gold/25"
             >
-              Expediciones
+              {t("expeditions_btn")}
             </button>
-            
-            <button 
-              onClick={() => scrollToSection('historia')}
+
+            <button
+              onClick={() => scrollToSection("historia")}
               className="border border-white/40 text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-full font-bold text-[10px] sm:text-xs uppercase tracking-widest hover:border-gold-light hover:text-gold-light transition-all active:scale-95 w-full sm:w-auto shadow-lg hover:shadow-gold/20"
             >
-              Nuestra Historia
+              {t("history_btn")}
             </button>
           </div>
         </motion.div>

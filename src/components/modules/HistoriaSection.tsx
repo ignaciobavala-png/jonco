@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 const DEFAULTS = {
   historia_imagen: "",
@@ -13,6 +14,7 @@ const DEFAULTS = {
 type HistoriaData = typeof DEFAULTS;
 
 export const HistoriaSection = () => {
+  const t = useTranslations("historia");
   const [data, setData] = useState<HistoriaData>(DEFAULTS);
   const [imgInView, setImgInView] = useState(false);
   const imgRef = useRef<HTMLDivElement>(null);
@@ -106,10 +108,9 @@ export const HistoriaSection = () => {
               className="space-y-6"
             >
               <span className="text-gold-light text-[8px] sm:text-[10px] font-black uppercase tracking-[0.5em] block opacity-70">
-                — Identidad y Origen
+                {t("label")}
               </span>
 
-              {/* TIPOGRAFÍA MANUSCRITA */}
               {data.historia_cita && (
                 <div className="space-y-4">
                   <h2 className="font-cormorant italic text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white leading-[1.1] drop-shadow-lg">
@@ -122,12 +123,11 @@ export const HistoriaSection = () => {
                 {data.historia_parrafo_1 && <p>{data.historia_parrafo_1}</p>}
                 {data.historia_parrafo_2 && <p>{data.historia_parrafo_2}</p>}
 
-                {/* Firma */}
                 {data.historia_firma && (
                   <div className="pt-6 sm:pt-8 flex items-end gap-4 sm:gap-6 border-t border-white/5">
                     <div className="flex flex-col">
                       <span className="text-white text-[8px] sm:text-[10px] uppercase tracking-widest font-black mb-2 opacity-30 italic">
-                        Autenticado por
+                        {t("authenticated_by")}
                       </span>
                       <span className="font-cormorant font-semibold text-3xl sm:text-4xl lg:text-5xl text-gold-light pb-2 drop-shadow-md">
                         {data.historia_firma}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 type Testimonial = {
   id?: number;
@@ -39,15 +40,19 @@ const FALLBACK: Testimonial[] = [
 const AUTOPLAY_DELAY = 5000;
 
 export const ClientFeedback = () => {
+  const t = useTranslations("feedback");
   const [testimonials, setTestimonials] = useState<Testimonial[]>(FALLBACK);
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
     fetch("/api/testimonios", { cache: "no-store" })
-      .then(r => r.ok ? r.json() : null)
-      .then(data => { if (Array.isArray(data) && data.length > 0) setTestimonials(data); })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) setTestimonials(data);
+      })
       .catch(() => {});
   }, []);
+
   const [direction, setDirection] = useState<1 | -1>(1);
   const [paused, setPaused] = useState(false);
   const dragStartX = useRef<number | null>(null);
@@ -98,17 +103,17 @@ export const ClientFeedback = () => {
     exit: (dir: number) => ({ x: dir > 0 ? -80 : 80, opacity: 0 }),
   };
 
-  const t = testimonials[current] ?? testimonials[0];
+  const testimonial = testimonials[current] ?? testimonials[0];
 
   return (
     <section className="relative z-10 bg-zinc-950 py-20 sm:py-24 px-6">
       <div className="max-w-3xl mx-auto">
         <div className="mb-12 space-y-4">
           <span className="text-gold text-[8px] sm:text-[10px] font-black uppercase tracking-[0.5em] block opacity-60">
-            — Confianza verificada
+            {t("label")}
           </span>
           <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tighter text-white leading-none italic">
-            Feedback de clientes
+            {t("title")}
           </h3>
         </div>
 
@@ -134,16 +139,16 @@ export const ClientFeedback = () => {
                 &ldquo;
               </span>
               <p className="text-zinc-200 text-lg sm:text-xl lg:text-2xl font-light leading-relaxed italic pl-2 mb-10">
-                {t.text}
+                {testimonial.text}
               </p>
               <div className="flex items-end justify-between border-t border-white/5 pt-6">
                 <div className="space-y-1">
-                  <p className="text-white text-[11px] uppercase tracking-widest font-black">{t.name}</p>
-                  <p className="text-white/30 text-[10px] uppercase tracking-widest font-black">{t.location}</p>
+                  <p className="text-white text-[11px] uppercase tracking-widest font-black">{testimonial.name}</p>
+                  <p className="text-white/30 text-[10px] uppercase tracking-widest font-black">{testimonial.location}</p>
                 </div>
                 <div className="text-right space-y-1">
-                  <p className="text-gold text-[10px] uppercase tracking-widest font-black">{t.experience}</p>
-                  <p className="text-white/20 text-[10px] uppercase tracking-[0.3em] font-black">{t.date}</p>
+                  <p className="text-gold text-[10px] uppercase tracking-widest font-black">{testimonial.experience}</p>
+                  <p className="text-white/20 text-[10px] uppercase tracking-[0.3em] font-black">{testimonial.date}</p>
                 </div>
               </div>
             </motion.div>

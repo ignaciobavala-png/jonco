@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { JON_CONTACT, formatReservaMessage } from "@/lib/constants";
+import { useTranslations } from "next-intl";
 
 type Experiencia = {
   id: string;
@@ -14,6 +15,7 @@ type Experiencia = {
 };
 
 export const ExperienceGrid = () => {
+  const t = useTranslations("experience");
   const [selectedPack, setSelectedPack] = useState<Experiencia | null>(null);
   const [activeImg, setActiveImg] = useState<string | null>(null);
   const [data, setData] = useState<Experiencia[]>([]);
@@ -78,7 +80,7 @@ export const ExperienceGrid = () => {
     return (
       <section className="py-24 px-6 w-full">
         <div className="flex justify-center items-center min-h-[400px]">
-          <div className="text-zinc-500 text-sm">Cargando expediciones...</div>
+          <div className="text-zinc-500 text-sm">{t("loading")}</div>
         </div>
       </section>
     );
@@ -89,31 +91,31 @@ export const ExperienceGrid = () => {
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <div className="space-y-4">
             <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white leading-none">
-              Próximamente
+              {t("coming_soon_title")}
             </h2>
             <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
-              Estamos preparando experiencias únicas en el Delta. Muy pronto podrás descubrir nuestras expediciones exclusivas.
+              {t("coming_soon_text")}
             </p>
           </div>
-          
+
           <div className="flex justify-center">
-            <a 
-              href={JON_CONTACT.getWhatsAppLink("Hola! Me interesa conocer las futuras expediciones de Jonco.")}
+            <a
+              href={JON_CONTACT.getWhatsAppLink(t("whatsapp_coming"))}
               target="_blank"
               className="bg-white text-black px-8 py-4 rounded-full font-black uppercase tracking-widest text-[10px] hover:bg-gold transition-all active:scale-95"
             >
-              Consultar por Novedades
+              {t("consult_news")}
             </a>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-            {["Experiencias Exclusivas", "Navegación Privada", "Conexión con la Naturaleza"].map((title, i) => (
+            {([t("exclusive_exp"), t("private_nav"), t("nature")] as string[]).map((title, i) => (
               <div key={i} className="text-center space-y-3">
                 <div className="w-16 h-16 mx-auto bg-gold/20 rounded-full flex items-center justify-center">
                   <div className="w-8 h-8 bg-gold rounded-full" />
                 </div>
                 <h3 className="text-white font-black text-sm uppercase tracking-wider">{title}</h3>
-                <p className="text-zinc-500 text-sm">Descubre el Delta desde una perspectiva única y sofisticada.</p>
+                <p className="text-zinc-500 text-sm">{t("discover")}</p>
               </div>
             ))}
           </div>
@@ -135,16 +137,16 @@ export const ExperienceGrid = () => {
             className="group relative aspect-[4/5] rounded-[2rem] overflow-hidden bg-zinc-900 border border-white/5 cursor-pointer"
             onClick={() => setSelectedPack(tour)}
           >
-            <img 
-              src={tour.image} 
+            <img
+              src={tour.image}
               className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000"
-              alt={tour.title} 
+              alt={tour.title}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
-            
+
             <div className="absolute top-6 right-6">
               <span className="bg-black/50 backdrop-blur-md text-white text-[10px] px-3 py-1 rounded-full border border-white/10 font-bold uppercase tracking-widest">
-                {formatPrice(tour.price) ? `$ ${formatPrice(tour.price)}` : "Consultar"}
+                {formatPrice(tour.price) ? `$ ${formatPrice(tour.price)}` : t("consult")}
               </span>
             </div>
 
@@ -156,7 +158,7 @@ export const ExperienceGrid = () => {
                 {tour.title}
               </h3>
               <p className="text-white border-b border-gold/50 inline-block pb-1 text-[10px] uppercase tracking-widest font-bold group-hover:text-gold transition-colors">
-                Ver Detalles
+                {t("see_details")}
               </p>
             </div>
           </motion.div>
@@ -165,7 +167,7 @@ export const ExperienceGrid = () => {
 
       <AnimatePresence>
         {selectedPack && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -174,27 +176,27 @@ export const ExperienceGrid = () => {
             {/* FONDO INMERSIVO */}
             <div className="absolute inset-0 z-0">
               {activeImg && (
-                <motion.img 
+                <motion.img
                   key={`bg-${activeImg}`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 0.15 }}
-                  src={activeImg} 
-                  className="w-full h-full object-cover blur-3xl scale-110" 
+                  src={activeImg}
+                  className="w-full h-full object-cover blur-3xl scale-110"
                 />
               )}
               <div className="absolute inset-0 bg-black/80" />
             </div>
 
             {/* BOTÓN CERRAR SUPERIOR (FLOTANTE) */}
-            <button 
+            <button
               onClick={() => setSelectedPack(null)}
               className="absolute top-6 right-6 z-[120] flex items-center gap-3 bg-black/50 backdrop-blur-xl border border-white/10 px-4 py-2 rounded-full text-white hover:bg-white hover:text-black transition-all group"
             >
-              <span className="text-[10px] font-black uppercase tracking-widest">Cerrar</span>
+              <span className="text-[10px] font-black uppercase tracking-widest">{t("close")}</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
 
-            <motion.div 
+            <motion.div
               initial={{ y: "100%", opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: "100%", opacity: 0 }}
@@ -215,14 +217,14 @@ export const ExperienceGrid = () => {
                     />
                   )}
                 </AnimatePresence>
-                
+
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 px-3 py-2 bg-black/60 backdrop-blur-md rounded-2xl border border-white/5 max-w-[90%] overflow-x-auto no-scrollbar">
                   {selectedPack.gallery?.map((img: string, i: number) => (
-                    <button 
+                    <button
                       key={i}
                       onClick={() => setActiveImg(img)}
                       className={`relative w-10 h-10 md:w-14 md:h-14 rounded-lg overflow-hidden flex-shrink-0 transition-all ${
-                        activeImg === img ? 'ring-2 ring-gold scale-105' : 'opacity-40'
+                        activeImg === img ? "ring-2 ring-gold scale-105" : "opacity-40"
                       }`}
                     >
                       <img src={img} className="w-full h-full object-cover" alt={`${selectedPack.title} — foto ${i + 1}`} />
@@ -239,66 +241,44 @@ export const ExperienceGrid = () => {
                       {selectedPack.category}
                     </span>
                     <span className="text-white text-xl font-light tracking-tighter">
-                      Desde{" "}
+                      {t("from")}{" "}
                       <span className="font-black text-gold">
-                        {formatPrice(selectedPack.price) ? `$ ${formatPrice(selectedPack.price)}` : "Consultar"}
+                        {formatPrice(selectedPack.price) ? `$ ${formatPrice(selectedPack.price)}` : t("consult")}
                       </span>{" "}
-                      / pax
+                      {t("per_pax")}
                     </span>
                   </div>
-                  
+
                   <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white mb-6 leading-none italic">
                     {selectedPack.title}
                   </h2>
-                  
+
                   <p className="text-zinc-500 text-lg font-light leading-relaxed mb-10 italic border-l border-gold/30 pl-6">
                     {selectedPack.description}{" "}
                     {formatPrice(selectedPack.price) ? (
-                      <span className="text-white/70">(Precio: $ {formatPrice(selectedPack.price)})</span>
+                      <span className="text-white/70">($ {formatPrice(selectedPack.price)})</span>
                     ) : null}
                   </p>
 
-                  {/* CUADRO DE SALIDAS */}
-                  <div className="bg-zinc-900/50 rounded-2xl border border-white/5 p-6 mb-10">
-                    <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/5">
-                      <h4 className="text-white font-black text-[10px] uppercase tracking-[0.2em]">Próximas Salidas</h4>
-                      <div className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                        <span className="text-green-500 text-[10px] font-bold uppercase tracking-widest">Confirmadas</span>
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-4">
-                      <div className="flex justify-between text-xs uppercase font-bold tracking-widest text-white/40">
-                        <span>Lunes a Domingo</span>
-                        <span className="text-gold">10:00 AM // 17:00 PM</span>
-                      </div>
-                      <p className="text-[10px] text-zinc-500 leading-relaxed">
-                        * Los itinerarios pueden ajustarse según condiciones del río para garantizar la mejor experiencia.
-                      </p>
-                    </div>
-                  </div>
-
                   {/* BOTONES DE ACCIÓN */}
                   <div className="flex flex-col gap-4">
-                    <a 
+                    <a
                       href={JON_CONTACT.getWhatsAppLink(formatReservaMessage({
                         title: selectedPack.title,
                         category: selectedPack.category,
-                        price: selectedPack.price
+                        price: selectedPack.price,
                       }))}
                       target="_blank"
                       className="w-full bg-white text-black text-center py-5 rounded-full font-black uppercase tracking-[0.2em] text-[10px] hover:bg-gold transition-all active:scale-95"
                     >
-                      Reservar Expedición
+                      {t("book")}
                     </a>
-                    
-                    {/* SEGUNDO BOTÓN DE SALIDA (UX) */}
-                    <button 
+
+                    <button
                       onClick={() => setSelectedPack(null)}
                       className="w-full text-zinc-500 text-center py-2 text-[10px] uppercase tracking-[0.3em] font-black hover:text-white transition-colors"
                     >
-                      [ Volver a la Galería ]
+                      {t("back_gallery")}
                     </button>
                   </div>
                 </div>
