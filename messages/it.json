@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "home": "Home",
+    "history": "La Mia Storia",
+    "expeditions": "Spedizioni",
+    "clients": "I Miei Clienti",
+    "contact": "Contatto Diretto",
+    "whatsapp_message": "Ciao Jon! Vorrei informazioni su una spedizione."
+  },
+  "hero": {
+    "expeditions_btn": "Le Mie Spedizioni",
+    "history_btn": "La Mia Storia"
+  },
+  "historia": {
+    "label": "— Identità e Origini",
+    "authenticated_by": "Autenticato da"
+  },
+  "experience": {
+    "loading": "Caricamento delle mie spedizioni...",
+    "coming_soon_title": "Prossimamente",
+    "coming_soon_text": "Sto preparando esperienze uniche nel Delta. Presto potrete scoprire le mie spedizioni esclusive.",
+    "consult_news": "Richiedi Aggiornamenti",
+    "exclusive_exp": "Le Mie Esperienze Esclusive",
+    "private_nav": "La Mia Navigazione Privata",
+    "nature": "La Mia Connessione con la Natura",
+    "discover": "Scopri il Delta dalla mia prospettiva unica e sofisticata.",
+    "see_details": "Vedi Dettagli",
+    "close": "Chiudi",
+    "from": "Da",
+    "per_pax": "/ pax",
+    "book": "Prenota la Mia Spedizione",
+    "back_gallery": "[ Torna alla Galleria ]",
+    "consult": "Richiedi Info",
+    "whatsapp_coming": "Ciao! Sono interessato alle mie future spedizioni."
+  },
+  "feedback": {
+    "label": "— La Mia Fiducia Verificata",
+    "title": "Feedback dei Miei Clienti"
+  },
+  "custom": {
+    "label": "— Progetta la Tua Spedizione Con Me",
+    "title": "Progetta la Tua Esperienza Con Me",
+    "description": "Raccontami la tua idea e ti costruisco un percorso su misura. Minimalista, diretto, senza complicazioni.",
+    "destination_label": "Destinazione Desiderata",
+    "destination_placeholder": "Delta, Tigre, Uruguay, ecc.",
+    "dates_label": "Date Stimate",
+    "dates_placeholder": "Es: 15-18 marzo",
+    "passengers_label": "Passeggeri",
+    "passengers_placeholder": "Es: 4",
+    "budget_label": "Budget / persona",
+    "budget_placeholder": "Es: 120",
+    "message_label": "Messaggio Aggiuntivo",
+    "message_placeholder": "Tipo di imbarcazione, livello di avventura, preferenze, ecc.",
+    "submit": "Richiedi il Mio Preventivo",
+    "fill_all": "Compila tutti i campi per inviare.",
+    "error_destination": "Inserisci destinazione",
+    "error_dates": "Inserisci date",
+    "error_passengers": "Inserisci passeggeri",
+    "error_budget": "Inserisci budget",
+    "error_message": "Inserisci messaggio"
+  },
+  "footer": {
+    "tagline": "Curatore di spedizioni esclusive nel Delta del Paraná. Natura indomita e comfort assoluto.",
+    "navigation": "Navigazione",
+    "home": "Home",
+    "history": "La Mia Storia",
+    "expeditions": "Le Mie Spedizioni",
+    "contact_title": "Il Mio Contatto Diretto",
+    "whatsapp": "Il Mio WhatsApp Diretto",
+    "copyright": "© {year} Jonco Experience - Le Mie Spedizioni Curate",
+    "operating": "Operativo nel Delta del Paraná dal 2024",
+    "instagram": "Il Mio Instagram",
+    "developed_by": "Sito sviluppato da",
+    "whatsapp_message": "Ciao Jon! Vorrei informazioni su una expedizione.",
+    "whatsapp_info": "Ciao Jon! Vorrei informazioni."
+  }
+}

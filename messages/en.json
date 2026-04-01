@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "home": "Home",
+    "history": "My Story",
+    "expeditions": "Expeditions",
+    "clients": "My Clients",
+    "contact": "Direct Contact",
+    "whatsapp_message": "Hi Jon! I'd like to inquire about an expedition."
+  },
+  "hero": {
+    "expeditions_btn": "My Expeditions",
+    "history_btn": "My Story"
+  },
+  "historia": {
+    "label": "— Identity & Origin",
+    "authenticated_by": "Authenticated by"
+  },
+  "experience": {
+    "loading": "Loading my expeditions...",
+    "coming_soon_title": "Coming Soon",
+    "coming_soon_text": "I'm preparing unique experiences in the Delta. Very soon you'll be able to discover my exclusive expeditions.",
+    "consult_news": "Inquire About Updates",
+    "exclusive_exp": "My Exclusive Experiences",
+    "private_nav": "My Private Navigation",
+    "nature": "My Connection with Nature",
+    "discover": "Discover the Delta from my unique and sophisticated perspective.",
+    "see_details": "View Details",
+    "close": "Close",
+    "from": "From",
+    "per_pax": "/ pax",
+    "book": "Book My Expedition",
+    "back_gallery": "[ Back to Gallery ]",
+    "consult": "Inquire",
+    "whatsapp_coming": "Hi! I'm interested in learning about my upcoming expeditions."
+  },
+  "feedback": {
+    "label": "— My Verified Trust",
+    "title": "My Client Feedback"
+  },
+  "custom": {
+    "label": "— Design Your Expedition With Me",
+    "title": "Design Your Experience With Me",
+    "description": "Tell me your idea and I'll craft a custom route. Minimal, direct, no hassle.",
+    "destination_label": "Desired Destination",
+    "destination_placeholder": "Delta, Tigre, Uruguay, etc.",
+    "dates_label": "Estimated Dates",
+    "dates_placeholder": "e.g. March 15–18",
+    "passengers_label": "Passengers",
+    "passengers_placeholder": "e.g. 4",
+    "budget_label": "Budget / person",
+    "budget_placeholder": "e.g. 120",
+    "message_label": "Additional Message",
+    "message_placeholder": "Type of vessel, adventure level, preferences, etc.",
+    "submit": "Request My Quote",
+    "fill_all": "Please fill in all fields to send.",
+    "error_destination": "Fill in destination",
+    "error_dates": "Fill in dates",
+    "error_passengers": "Fill in passengers",
+    "error_budget": "Fill in budget",
+    "error_message": "Fill in message"
+  },
+  "footer": {
+    "tagline": "Curator of exclusive expeditions in the Paraná Delta. Untamed nature and absolute comfort.",
+    "navigation": "Navigation",
+    "home": "Home",
+    "history": "My Story",
+    "expeditions": "My Expeditions",
+    "contact_title": "My Direct Contact",
+    "whatsapp": "My Direct WhatsApp",
+    "copyright": "© {year} Jonco Experience - My Curated Expeditions",
+    "operating": "Operating in the Paraná Delta since 2024",
+    "instagram": "My Instagram",
+    "developed_by": "Site developed by",
+    "whatsapp_message": "Hi Jon! I'd like to inquire about an expedition.",
+    "whatsapp_info": "Hi Jon! I'd like some information."
+  }
+}
