@@ -17,7 +17,9 @@ export const HistoriaSection = () => {
   const t = useTranslations("historia");
   const [data, setData] = useState<HistoriaData>(DEFAULTS);
   const [imgInView, setImgInView] = useState(false);
-  const imgRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const mobileImgRef = useRef<HTMLDivElement>(null);
+  const desktopImgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,18 +62,26 @@ export const HistoriaSection = () => {
   }, []);
 
   useEffect(() => {
-    const el = imgRef.current;
-    if (!el) return;
+    const mobileEl = mobileImgRef.current;
+    const desktopEl = desktopImgRef.current;
+    
+    if (!mobileEl && !desktopEl) return;
+    
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setImgInView(true);
-          observer.disconnect();
-        }
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setImgInView(true);
+            observer.disconnect();
+          }
+        });
       },
       { threshold: 0.3 }
     );
-    observer.observe(el);
+    
+    if (mobileEl) observer.observe(mobileEl);
+    if (desktopEl) observer.observe(desktopEl);
+    
     return () => observer.disconnect();
   }, []);
 
@@ -89,22 +99,38 @@ export const HistoriaSection = () => {
       </div>
 
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 xl:gap-24 items-start">
+        {/* Mobile Layout: identidad -> foto -> texto -> firma */}
+        <div className="lg:hidden space-y-8">
+          {/* IDENTIDAD - Mobile only */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <span className="text-gold-light text-[8px] sm:text-[10px] font-black uppercase tracking-[0.5em] block opacity-70">
+              {t("label")}
+            </span>
+          </motion.div>
 
-          {/* MULTIMEDIA */}
+          {/* FOTO - Mobile only */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="order-2 lg:order-1"
           >
-            <div ref={imgRef} className="relative rounded-sm overflow-hidden shadow-2xl sticky top-24">
+            <div 
+              ref={mobileImgRef} 
+              className="relative rounded-sm overflow-hidden shadow-2xl mx-auto max-w-sm cursor-pointer"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
               {data.historia_imagen ? (
                 <img
                   src={data.historia_imagen}
                   alt="Navegación Jonco"
-                  className={`w-full aspect-[3/4] object-cover transition-all duration-700 ease-in-out ${imgInView ? "grayscale-0 brightness-100" : "grayscale brightness-75"}`}
+                  className={`w-full aspect-[3/4] object-cover transition-all duration-700 ease-in-out ${imgInView && !isHovered ? "grayscale-0 brightness-100" : isHovered ? "grayscale-0 brightness-110 scale-105" : "grayscale brightness-75"}`}
                 />
               ) : (
                 <div className="w-full aspect-[3/4] bg-stone-800 animate-pulse" />
@@ -113,8 +139,71 @@ export const HistoriaSection = () => {
             </div>
           </motion.div>
 
-          {/* TEXTO */}
-          <div className="order-1 lg:order-2 space-y-6 sm:space-y-8">
+          {/* TEXTO Y FIRMA - Mobile only */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="space-y-6"
+          >
+            {data.historia_cita && (
+              <div className="space-y-4 text-center">
+                <h2 className="font-cormorant italic text-3xl sm:text-4xl md:text-5xl text-white leading-[1.1] drop-shadow-lg">
+                  {data.historia_cita}
+                </h2>
+              </div>
+            )}
+
+            <div className="space-y-4 sm:space-y-6 text-zinc-300 text-sm sm:text-base font-light leading-relaxed">
+              {data.historia_parrafo_1 && <p>{data.historia_parrafo_1}</p>}
+              {data.historia_parrafo_2 && <p>{data.historia_parrafo_2}</p>}
+
+              {data.historia_firma && (
+                <div className="pt-6 sm:pt-8 flex items-end gap-4 sm:gap-6 border-t border-white/5">
+                  <div className="flex flex-col">
+                    <span className="text-white text-[8px] sm:text-[10px] uppercase tracking-widest font-black mb-2 opacity-30 italic">
+                      {t("authenticated_by")}
+                    </span>
+                    <span className="font-cormorant font-semibold text-3xl sm:text-4xl text-gold-light pb-2 drop-shadow-md break-words">
+                      {data.historia_firma}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Desktop Layout: foto -> texto */}
+        <div className="hidden lg:grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 xl:gap-24 items-start">
+          {/* MULTIMEDIA - Desktop only */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <div 
+              ref={desktopImgRef} 
+              className="relative rounded-sm overflow-hidden shadow-2xl sticky top-24 cursor-pointer"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              {data.historia_imagen ? (
+                <img
+                  src={data.historia_imagen}
+                  alt="Navegación Jonco"
+                  className={`w-full aspect-[3/4] object-cover transition-all duration-700 ease-in-out ${imgInView && !isHovered ? "grayscale-0 brightness-100" : isHovered ? "grayscale-0 brightness-110 scale-105" : "grayscale brightness-75"}`}
+                />
+              ) : (
+                <div className="w-full aspect-[3/4] bg-stone-800 animate-pulse" />
+              )}
+              <div className="absolute inset-0 border-[12px] sm:border-[20px] border-black/10 pointer-events-none" />
+            </div>
+          </motion.div>
+
+          {/* TEXTO - Desktop only */}
+          <div className="space-y-6 sm:space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -152,7 +241,6 @@ export const HistoriaSection = () => {
               </div>
             </motion.div>
           </div>
-
         </div>
       </div>
     </section>
