@@ -43,47 +43,19 @@ export async function POST(request: NextRequest) {
       .select()
       .single();
 
-    // If the error is about missing 'country' column, try to add it first
+    // If the error is about missing 'country' column, proceed without it
     if (error && error.message && error.message.includes('column') && error.message.includes('country')) {
-      console.log("Country column doesn't exist, attempting to add it");
+      console.log("Country column doesn't exist, proceeding without country");
+      insertData = { name, location, experience, date, text, activo: true };
+
+      const result = await supabase
+        .from("testimonios")
+        .insert(insertData)
+        .select()
+        .single();
       
-      // Try to add the country column
-      try {
-        const { error: alterError } = await supabase
-          .rpc('exec', { sql: 'ALTER TABLE testimonios ADD COLUMN country VARCHAR(2)' });
-        
-        if (alterError) {
-          console.log("Could not add column automatically, proceeding without country");
-        } else {
-          console.log("Country column added successfully, retrying insert");
-          // Retry the insert now that the column exists
-          const result = await supabase
-            .from("testimonios")
-            .insert(insertData)
-            .select()
-            .single();
-          
-          data = result.data;
-          error = result.error;
-        }
-      } catch (e) {
-        console.log("Could not add column automatically, proceeding without country");
-      }
-
-      // If still failing, insert without country
-      if (error) {
-        console.log("Proceeding without country field");
-        insertData = { name, location, experience, date, text, activo: true };
-
-        const result = await supabase
-          .from("testimonios")
-          .insert(insertData)
-          .select()
-          .single();
-        
-        data = result.data;
-        error = result.error;
-      }
+      data = result.data;
+      error = result.error;
     }
 
     if (error) {
@@ -131,9 +103,9 @@ export async function PUT(request: NextRequest) {
       .select()
       .single();
 
-    // If the error is about missing 'country' column, try without it
+    // If the error is about missing 'country' column, proceed without it
     if (error && error.message && error.message.includes('column') && error.message.includes('country')) {
-      console.log("Country column doesn't exist, trying without it");
+      console.log("Country column doesn't exist, proceeding without country");
       updateData = { name, location, experience, date, text };
       try {
         updateData.updated_at = new Date().toISOString();
