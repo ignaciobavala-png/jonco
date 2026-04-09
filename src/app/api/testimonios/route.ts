@@ -44,18 +44,31 @@ export async function POST(request: NextRequest) {
       .single();
 
     // If the error is about missing 'country' column, proceed without it
-    if (error && error.message && error.message.includes('column') && error.message.includes('country')) {
-      console.log("Country column doesn't exist, proceeding without country");
-      insertData = { name, location, experience, date, text, activo: true };
-
-      const result = await supabase
-        .from("testimonios")
-        .insert(insertData)
-        .select()
-        .single();
+    if (error) {
+      console.log("First insert failed, error:", error);
       
-      data = result.data;
-      error = result.error;
+      // Try multiple patterns for column error detection
+      const isColumnError = error.message && (
+        error.message.includes('column') && error.message.includes('country') ||
+        error.message.includes('country') && error.message.includes('does not exist') ||
+        error.message.includes('undefined column') ||
+        error.code === '42703' // PostgreSQL undefined column error
+      );
+      
+      if (isColumnError) {
+        console.log("Country column doesn't exist, proceeding without country");
+        insertData = { name, location, experience, date, text, activo: true };
+
+        const result = await supabase
+          .from("testimonios")
+          .insert(insertData)
+          .select()
+          .single();
+        
+        data = result.data;
+        error = result.error;
+        console.log("Second insert result:", { data, error });
+      }
     }
 
     if (error) {
@@ -104,24 +117,37 @@ export async function PUT(request: NextRequest) {
       .single();
 
     // If the error is about missing 'country' column, proceed without it
-    if (error && error.message && error.message.includes('column') && error.message.includes('country')) {
-      console.log("Country column doesn't exist, proceeding without country");
-      updateData = { name, location, experience, date, text };
-      try {
-        updateData.updated_at = new Date().toISOString();
-      } catch (e) {
-        // If timestamp creation fails, continue without it
-      }
-
-      const result = await supabase
-        .from("testimonios")
-        .update(updateData)
-        .eq("id", id)
-        .select()
-        .single();
+    if (error) {
+      console.log("First update failed, error:", error);
       
-      data = result.data;
-      error = result.error;
+      // Try multiple patterns for column error detection
+      const isColumnError = error.message && (
+        error.message.includes('column') && error.message.includes('country') ||
+        error.message.includes('country') && error.message.includes('does not exist') ||
+        error.message.includes('undefined column') ||
+        error.code === '42703' // PostgreSQL undefined column error
+      );
+      
+      if (isColumnError) {
+        console.log("Country column doesn't exist, proceeding without country");
+        updateData = { name, location, experience, date, text };
+        try {
+          updateData.updated_at = new Date().toISOString();
+        } catch (e) {
+          // If timestamp creation fails, continue without it
+        }
+
+        const result = await supabase
+          .from("testimonios")
+          .update(updateData)
+          .eq("id", id)
+          .select()
+          .single();
+        
+        data = result.data;
+        error = result.error;
+        console.log("Second update result:", { data, error });
+      }
     }
 
     if (error) {
