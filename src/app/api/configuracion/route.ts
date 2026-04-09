@@ -106,7 +106,7 @@ export async function PUT(request: NextRequest) {
       }
 
       // Update only the specified locale
-      jsonValue[locale] = valor;
+      (jsonValue as any)[locale] = valor;
       finalValue = JSON.stringify(jsonValue);
     }
 
