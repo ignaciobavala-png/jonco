@@ -55,7 +55,12 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="relative bg-zinc-950 border-t border-white/5 pt-16 sm:pt-20 pb-8 sm:pb-10 px-4 sm:px-6 mt-16 sm:mt-20 overflow-hidden">
+    <footer 
+      className="relative bg-zinc-900 border-t border-white/5 pt-16 sm:pt-20 pb-8 sm:pb-10 px-4 sm:px-6 mt-16 sm:mt-20 overflow-hidden"
+      style={{
+        backgroundImage: 'radial-gradient(circle at 80% 10%, rgba(212, 175, 55, 0.02) 0%, transparent 40%)'
+      }}
+    >
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-10 left-10 text-gold font-mono text-[8px] tracking-[0.8em] uppercase rotate-90 hidden lg:block">

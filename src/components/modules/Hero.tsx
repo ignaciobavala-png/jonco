@@ -20,6 +20,7 @@ export const Hero = () => {
   const [heroVideoUrl, setHeroVideoUrl] = useState<string | null | undefined>(undefined);
   const [videoReady, setVideoReady] = useState(false);
   const [textData, setTextData] = useState<HeroTextData>(DEFAULTS);
+  const [textReady, setTextReady] = useState(false);
   const heroVideoUrlRef = useRef<string | null | undefined>(undefined);
 
   useEffect(() => {
@@ -43,6 +44,7 @@ export const Hero = () => {
             hero_titulo_accent: get("hero_titulo_accent"),
             hero_subtitulo: get("hero_subtitulo"),
           });
+          setTextReady(true);
         } else {
           setHeroVideoUrl(null);
         }
@@ -69,7 +71,13 @@ export const Hero = () => {
   };
 
   return (
-    <section className="relative h-[100vh] w-full overflow-hidden flex items-center justify-center bg-black" style={{ height: 'calc(100vh - var(--jonco-navbar-h, 80px))' }}>
+    <section 
+        className="relative h-[100vh] w-full overflow-hidden flex items-center justify-center bg-zinc-900" 
+        style={{ 
+          height: 'calc(100vh - var(--jonco-navbar-h, 80px))',
+          backgroundImage: 'radial-gradient(circle at 30% 70%, rgba(212, 175, 55, 0.04) 0%, transparent 60%), radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.02) 0%, transparent 60%)'
+        }}
+      >
       {/* Background Layer */}
       <div className="absolute inset-0 z-0">
         {heroVideoUrl === undefined ? null : heroVideoUrl ? (
@@ -98,32 +106,59 @@ export const Hero = () => {
       <div className="relative z-10 px-6 sm:px-10 md:px-16 lg:px-24 text-center max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
+          animate={{ opacity: textReady ? 1 : 0, y: textReady ? 0 : 30 }}
+          transition={{ duration: 1, delay: textReady ? 0.3 : 0 }}
           className="space-y-6 sm:space-y-8"
         >
           {textData.hero_label && (
-            <span className="text-gold-light uppercase text-[8px] sm:text-[10px] tracking-[0.5em] font-bold block opacity-90 drop-shadow-gold mx-auto">
+            <motion.span 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: textReady ? 1 : 0, y: textReady ? 0 : 20 }}
+              transition={{ duration: 0.8, delay: textReady ? 0.4 : 0 }}
+              className="text-gold-light uppercase text-[8px] sm:text-[10px] tracking-[0.5em] font-bold block opacity-90 drop-shadow-gold mx-auto"
+            >
               {textData.hero_label}
-            </span>
+            </motion.span>
           )}
 
           {(textData.hero_titulo || textData.hero_titulo_accent) && (
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tighter text-white leading-tight uppercase text-center">
+            <motion.h1 
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={{ opacity: textReady ? 1 : 0, y: textReady ? 0 : 30, scale: textReady ? 1 : 0.95 }}
+              transition={{ duration: 1, delay: textReady ? 0.6 : 0 }}
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tighter text-white leading-tight uppercase text-center"
+            >
               {textData.hero_titulo && <>{textData.hero_titulo}<br className="hidden sm:block" /></>}
               {textData.hero_titulo_accent && (
-                <span className="font-black text-gold-bright drop-shadow-lg block">{textData.hero_titulo_accent}</span>
+                <motion.span 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: textReady ? 1 : 0, y: textReady ? 0 : 20 }}
+                  transition={{ duration: 0.8, delay: textReady ? 0.8 : 0 }}
+                  className="font-black text-gold-bright drop-shadow-lg block"
+                >
+                  {textData.hero_titulo_accent}
+                </motion.span>
               )}
-            </h1>
+            </motion.h1>
           )}
 
           {textData.hero_subtitulo && (
-            <p className="text-zinc-200 text-sm sm:text-base md:text-lg max-w-2xl font-light leading-relaxed mx-auto text-center drop-shadow-md">
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: textReady ? 1 : 0, y: textReady ? 0 : 20 }}
+              transition={{ duration: 0.8, delay: textReady ? 1.0 : 0 }}
+              className="text-zinc-200 text-sm sm:text-base md:text-lg max-w-2xl font-light leading-relaxed mx-auto text-center drop-shadow-md"
+            >
               {textData.hero_subtitulo}
-            </p>
+            </motion.p>
           )}
 
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-6 justify-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: textReady ? 1 : 0, y: textReady ? 0 : 30 }}
+            transition={{ duration: 0.8, delay: textReady ? 1.2 : 0 }}
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-6 justify-center"
+          >
             <button
               onClick={() => scrollToSection("experiencias")}
               className="bg-white text-black px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-[10px] sm:text-xs uppercase tracking-widest hover:bg-gold-light transition-all active:scale-95 w-full sm:w-auto shadow-lg hover:shadow-gold/25"
@@ -137,7 +172,7 @@ export const Hero = () => {
             >
               {t("history_btn")}
             </button>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>

@@ -18,7 +18,7 @@ export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<Tab>("expediciones");
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col">
+    <div className="min-h-screen bg-zinc-900 flex flex-col">
       <header className="border-b border-white/5 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <img src="/branding/jonco-logo.svg" alt="Jonco" width={20} height={20} />

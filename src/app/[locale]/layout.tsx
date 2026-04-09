@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "../globals.css";
 import { RootShell } from "@/components/shared/RootShell";
+import { ScrollToTop } from "@/components/shared/ScrollToTop";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -73,7 +74,25 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale}>
-      <body className="antialiased bg-zinc-950 text-white flex flex-col min-h-screen">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Immediately scroll to top on page load
+              if (typeof window !== 'undefined') {
+                window.addEventListener('load', function() {
+                  window.scrollTo(0, 0);
+                  history.scrollRestoration = 'manual';
+                });
+                // Prevent scroll restoration on browser back/forward
+                history.scrollRestoration = 'manual';
+              }
+            `,
+          }}
+        />
+      </head>
+      <body className="antialiased bg-zinc-900 text-white flex flex-col min-h-screen">
+        <ScrollToTop />
         <NextIntlClientProvider messages={messages}>
           <RootShell>{children}</RootShell>
         </NextIntlClientProvider>

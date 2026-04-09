@@ -72,7 +72,13 @@ export const HistoriaSection = () => {
   }, []);
 
   return (
-    <section id="historia" className="relative scroll-mt-32 py-20 sm:py-24 md:py-32 lg:py-48 px-4 sm:px-6 bg-zinc-950">
+    <section 
+        id="historia" 
+        className="relative scroll-mt-32 py-20 sm:py-24 md:py-32 lg:py-48 px-4 sm:px-6 bg-zinc-900"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 70% 20%, rgba(212, 175, 55, 0.02) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.01) 0%, transparent 50%)'
+        }}
+      >
       {/* Coordenadas en el fondo */}
       <div className="absolute top-10 left-10 text-white/[0.03] font-mono text-[8px] sm:text-[10px] tracking-[0.8em] uppercase vertical-text hidden md:block">
         Exploración Continua // Delta Argentino

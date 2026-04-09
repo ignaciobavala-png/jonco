@@ -148,11 +148,14 @@ export const Navbar = () => {
       <nav
         ref={navRef}
         className={`fixed top-0 w-full z-[200] transition-all duration-500 ${immersiveOpen ? "opacity-0 pointer-events-none" : "opacity-100"} ${
-          scrolled ? "bg-white/5 backdrop-blur-xl border-b border-white/10 py-3 md:py-4" : "!bg-transparent py-4 md:py-6"
+          scrolled ? "bg-zinc-900/40 backdrop-blur-xl border-b border-white/10 py-3 md:py-4" : "!bg-transparent py-4 md:py-6"
         }`}
         style={{
-          backgroundColor: scrolled ? "rgba(255, 255, 255, 0.05)" : "transparent",
+          backgroundColor: scrolled ? "rgba(24, 24, 27, 0.4)" : "transparent",
           backdropFilter: scrolled ? "blur(12px)" : "none",
+          backgroundImage: scrolled ? 
+            "radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.05) 0%, transparent 70%)" : 
+            "none",
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center">
@@ -229,7 +232,10 @@ export const Navbar = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-[190] md:hidden bg-black/95 backdrop-blur-lg"
+            className="fixed inset-0 z-[190] md:hidden bg-zinc-900/95 backdrop-blur-lg"
+            style={{
+              backgroundImage: "radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 70%)",
+            }}
           >
             <div className="flex flex-col items-center justify-center h-full gap-8 px-6">
               <button

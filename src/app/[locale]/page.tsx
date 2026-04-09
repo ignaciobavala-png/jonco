@@ -20,7 +20,7 @@ const jsonLd = {
 
 export default function Home() {
   return (
-    <div className="relative bg-zinc-950 min-h-screen overflow-x-hidden">
+    <div className="relative bg-zinc-900 min-h-screen overflow-x-hidden">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -30,7 +30,7 @@ export default function Home() {
         <HistoriaSection />
 
         {/* SECCIÓN EXPERIENCIAS */}
-        <section id="experiencias" className="relative z-10 bg-zinc-950 scroll-mt-32">
+        <section id="experiencias" className="relative z-10 bg-zinc-900 scroll-mt-32">
           <ExperienceGrid />
           <section id="feedback" className="scroll-mt-32">
             <ClientFeedback />
