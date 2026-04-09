@@ -26,7 +26,11 @@ export const Hero = () => {
   useEffect(() => {
     const fetchHeroVideo = async () => {
       try {
-        const res = await fetch("/api/configuracion", { cache: "no-store" });
+        // Get current locale from URL or default to 'es'
+        const locale = window.location.pathname.startsWith('/en') ? 'en' : 
+                      window.location.pathname.startsWith('/it') ? 'it' : 'es';
+        
+        const res = await fetch(`/api/configuracion?locale=${locale}`, { cache: "no-store" });
         if (res.ok) {
           const config = await res.json();
           const heroConfig = config.find((c: any) => c.clave === "hero_video_url");

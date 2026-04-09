@@ -9,7 +9,13 @@ type Configuracion = {
   updated_at: string;
 };
 
-export const ConfiguracionManager = () => {
+type Language = "es" | "en" | "it";
+
+interface ConfiguracionManagerProps {
+  currentLanguage: Language;
+}
+
+export const ConfiguracionManager = ({ currentLanguage }: ConfiguracionManagerProps) => {
   const [config, setConfig] = useState<Configuracion[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -21,13 +27,7 @@ export const ConfiguracionManager = () => {
   const [heroTituloAccent, setHeroTituloAccent] = useState("");
   const [heroSubtitulo, setHeroSubtitulo] = useState("");
 
-  // Historia form state
-  const [historiaCita, setHistoriaCita] = useState("");
-  const [historiaParrafo1, setHistoriaParrafo1] = useState("");
-  const [historiaParrafo2, setHistoriaParrafo2] = useState("");
-  const [historiaFirma, setHistoriaFirma] = useState("");
-  const [historiaImagen, setHistoriaImagen] = useState("");
-
+  
   // Footer form state
   const [footerTagline, setFooterTagline] = useState("");
   const [footerLocation, setFooterLocation] = useState("");
@@ -37,17 +37,12 @@ export const ConfiguracionManager = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/configuracion");
+      const res = await fetch(`/api/configuracion?locale=${currentLanguage}`);
       if (!res.ok) throw new Error();
       const data: Configuracion[] = await res.json();
       setConfig(Array.isArray(data) ? data : []);
 
       const get = (clave: string) => data.find(c => c.clave === clave)?.valor ?? "";
-      setHistoriaCita(get("historia_cita"));
-      setHistoriaParrafo1(get("historia_parrafo_1"));
-      setHistoriaParrafo2(get("historia_parrafo_2"));
-      setHistoriaFirma(get("historia_firma"));
-      setHistoriaImagen(get("historia_imagen"));
       setHeroLabel(get("hero_label"));
       setHeroTitulo(get("hero_titulo"));
       setHeroTituloAccent(get("hero_titulo_accent"));
@@ -62,14 +57,14 @@ export const ConfiguracionManager = () => {
     }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, [currentLanguage]);
 
   const updateConfig = async (clave: string, valor: string) => {
     setSaving(true);
     try {
       const res = await fetch("/api/configuracion", {
         method: "PUT",
-        body: JSON.stringify({ clave, valor }),
+        body: JSON.stringify({ clave, valor, locale: currentLanguage }),
         headers: { "Content-Type": "application/json" },
       });
       if (!res.ok) throw new Error();
@@ -85,10 +80,10 @@ export const ConfiguracionManager = () => {
     setSaving(true);
     try {
       await Promise.all([
-        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "hero_label", valor: heroLabel }) }),
-        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "hero_titulo", valor: heroTitulo }) }),
-        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "hero_titulo_accent", valor: heroTituloAccent }) }),
-        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "hero_subtitulo", valor: heroSubtitulo }) }),
+        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "hero_label", valor: heroLabel, locale: currentLanguage }) }),
+        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "hero_titulo", valor: heroTitulo, locale: currentLanguage }) }),
+        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "hero_titulo_accent", valor: heroTituloAccent, locale: currentLanguage }) }),
+        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "hero_subtitulo", valor: heroSubtitulo, locale: currentLanguage }) }),
       ]);
       await load();
     } catch {
@@ -98,31 +93,14 @@ export const ConfiguracionManager = () => {
     }
   };
 
-  const saveHistoria = async () => {
-    setSaving(true);
-    try {
-      await Promise.all([
-        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "historia_imagen", valor: historiaImagen }) }),
-        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "historia_cita", valor: historiaCita }) }),
-        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "historia_parrafo_1", valor: historiaParrafo1 }) }),
-        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "historia_parrafo_2", valor: historiaParrafo2 }) }),
-        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "historia_firma", valor: historiaFirma }) }),
-      ]);
-      await load();
-    } catch {
-      alert("Error al guardar la sección Historia. Intentá de nuevo.");
-    } finally {
-      setSaving(false);
-    }
-  };
-
+  
   const saveFooter = async () => {
     setSaving(true);
     try {
       await Promise.all([
-        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "footer_tagline", valor: footerTagline }) }),
-        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "footer_location", valor: footerLocation }) }),
-        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "footer_coordinates", valor: footerCoordinates }) }),
+        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "footer_tagline", valor: footerTagline, locale: currentLanguage }) }),
+        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "footer_location", valor: footerLocation, locale: currentLanguage }) }),
+        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "footer_coordinates", valor: footerCoordinates, locale: currentLanguage }) }),
       ]);
       await load();
     } catch {
@@ -226,99 +204,7 @@ export const ConfiguracionManager = () => {
           </div>
         </div>
 
-        {/* ── SECCIÓN NUESTRA HISTORIA ── */}
-        <div className="bg-zinc-900/40 border border-white/5 rounded-2xl p-6 space-y-6">
-          <div>
-            <h3 className="text-white font-black text-lg mb-1">Nuestra Historia</h3>
-            <p className="text-zinc-400 text-sm">
-              Contenido de la sección "Identidad y Origen" de la landing.
-            </p>
-          </div>
-
-          {/* Imagen */}
-          <div>
-            <label className="text-[10px] uppercase tracking-widest font-black text-white/40 block mb-3">
-              Foto del Capitán
-            </label>
-            {historiaImagen && (
-              <img
-                src={historiaImagen}
-                alt="Historia"
-                className="w-full max-w-xs aspect-[3/4] object-cover rounded-lg border border-white/10 mb-3 grayscale brightness-75"
-              />
-            )}
-            <ImageUploader
-              onUpload={(url) => setHistoriaImagen(url)}
-              currentImage={historiaImagen}
-              folder="configuracion"
-              accept="image/*"
-            />
-            <p className="text-zinc-600 text-[9px] mt-2">
-              Imagen en proporción 3:4. JPG, PNG, WebP hasta 10MB.
-            </p>
-          </div>
-
-          {/* Cita */}
-          <div>
-            <label className="text-[10px] uppercase tracking-widest font-black text-white/40 block mb-2">
-              Cita principal (tipografía firma)
-            </label>
-            <textarea
-              value={historiaCita}
-              onChange={e => setHistoriaCita(e.target.value)}
-              rows={3}
-              className="w-full bg-zinc-800 border border-white/10 rounded-lg px-4 py-3 text-white text-sm font-light resize-none focus:outline-none focus:border-white/30"
-            />
-          </div>
-
-          {/* Párrafo 1 */}
-          <div>
-            <label className="text-[10px] uppercase tracking-widest font-black text-white/40 block mb-2">
-              Primer párrafo
-            </label>
-            <textarea
-              value={historiaParrafo1}
-              onChange={e => setHistoriaParrafo1(e.target.value)}
-              rows={4}
-              className="w-full bg-zinc-800 border border-white/10 rounded-lg px-4 py-3 text-white text-sm font-light resize-none focus:outline-none focus:border-white/30"
-            />
-          </div>
-
-          {/* Párrafo 2 */}
-          <div>
-            <label className="text-[10px] uppercase tracking-widest font-black text-white/40 block mb-2">
-              Segundo párrafo
-            </label>
-            <textarea
-              value={historiaParrafo2}
-              onChange={e => setHistoriaParrafo2(e.target.value)}
-              rows={4}
-              className="w-full bg-zinc-800 border border-white/10 rounded-lg px-4 py-3 text-white text-sm font-light resize-none focus:outline-none focus:border-white/30"
-            />
-          </div>
-
-          {/* Firma */}
-          <div>
-            <label className="text-[10px] uppercase tracking-widest font-black text-white/40 block mb-2">
-              Firma
-            </label>
-            <input
-              type="text"
-              value={historiaFirma}
-              onChange={e => setHistoriaFirma(e.target.value)}
-              className="w-full bg-zinc-800 border border-white/10 rounded-lg px-4 py-3 text-white text-sm font-light focus:outline-none focus:border-white/30"
-            />
-          </div>
-
-          <button
-            onClick={saveHistoria}
-            disabled={saving}
-            className="w-full sm:w-auto bg-white text-black px-8 py-3 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-zinc-200 transition-colors disabled:opacity-40"
-          >
-            {saving ? "Guardando..." : "Guardar Historia"}
-          </button>
-        </div>
-
+        
         {/* ── SECCIÓN FOOTER ── */}
         <div className="bg-zinc-900/40 border border-white/5 rounded-2xl p-6 space-y-6">
           <div>

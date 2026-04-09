@@ -18,12 +18,16 @@ export const Footer = () => {
   useEffect(() => {
     const loadFooterConfig = async () => {
       try {
+        // Get current locale from URL or default to 'es'
+        const locale = window.location.pathname.startsWith('/en') ? 'en' : 
+                      window.location.pathname.startsWith('/it') ? 'it' : 'es';
+        
         // Load contact data from contacto table
         const contactoRes = await fetch("/api/contacto");
         const contactoData = contactoRes.ok ? await contactoRes.json() : {};
         
-        // Load footer-specific config from configuracion table
-        const configRes = await fetch("/api/configuracion");
+        // Load footer-specific config from configuracion table with locale
+        const configRes = await fetch(`/api/configuracion?locale=${locale}`);
         const configData = configRes.ok ? await configRes.json() : [];
         const getConfig = (clave: string) => configData.find((c: any) => c.clave === clave)?.valor || "";
         
