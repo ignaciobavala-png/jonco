@@ -279,7 +279,6 @@ export const ExpedicionesManager = () => {
             {[
               { label: "Título", key: "title", placeholder: "Ej: Delta Premium" },
               { label: "Categoría", key: "category", placeholder: "Ej: Exclusivo, Aventura..." },
-              { label: "Descripción", key: "description", placeholder: "Descripción del paquete" },
             ].map(({ label, key, placeholder }) => (
               <div key={key}>
                 <label className="text-[10px] uppercase tracking-widest font-black text-white/40 block mb-1">{label}</label>
@@ -291,6 +290,17 @@ export const ExpedicionesManager = () => {
                 />
               </div>
             ))}
+
+            <div>
+              <label className="text-[10px] uppercase tracking-widest font-black text-white/40 block mb-1">Descripción</label>
+              <textarea
+                value={editing.description ?? ""}
+                onChange={(e) => setEditing((ed) => ed ? { ...ed, description: e.target.value } : ed)}
+                placeholder="Descripción detallada de la expedición..."
+                rows={4}
+                className="w-full bg-zinc-800 border border-white/10 focus:border-gold outline-none rounded-lg px-4 py-2.5 text-white text-sm placeholder:text-white/20 transition-colors resize-none"
+              />
+            </div>
 
             <div>
               <label className="text-[10px] uppercase tracking-widest font-black text-white/40 block mb-1">Imagen Principal</label>

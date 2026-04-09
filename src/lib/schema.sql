@@ -28,6 +28,19 @@ CREATE TABLE IF NOT EXISTS contacto (
   valor VARCHAR(500) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS testimonios (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  location VARCHAR(255),
+  experience VARCHAR(255),
+  date VARCHAR(100),
+  country VARCHAR(2) DEFAULT NULL,  -- ISO country code (AR, US, etc.)
+  text TEXT NOT NULL,
+  activo BOOLEAN DEFAULT true,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Seed contacto
 INSERT IGNORE INTO contacto (clave, valor) VALUES
   ('telefono', '+5491140765354'),

@@ -1,41 +1,41 @@
 {
   "nav": {
     "home": "Inicio",
-    "history": "Mi Historia",
+    "history": "Historia",
     "expeditions": "Expediciones",
-    "clients": "Mis Clientes",
+    "clients": "Clientes",
     "contact": "Contacto Directo",
     "whatsapp_message": "Hola Jon! Quiero consultar por una expedición."
   },
   "hero": {
-    "expeditions_btn": "Mis Expediciones",
-    "history_btn": "Mi Historia"
+    "expeditions_btn": "Expediciones",
+    "history_btn": "Historia"
   },
   "historia": {
     "label": "— Identidad y Origen",
     "authenticated_by": "Autenticado por"
   },
   "experience": {
-    "loading": "Cargando mis expediciones...",
+    "loading": "Cargando expediciones...",
     "coming_soon_title": "Próximamente",
-    "coming_soon_text": "Estoy preparando experiencias únicas en el Delta. Muy pronto podrás descubrir mis expediciones exclusivas.",
+    "coming_soon_text": "Preparando experiencias únicas en el Delta. Muy pronto podrás descubrir expediciones exclusivas.",
     "consult_news": "Consultar por Novedades",
-    "exclusive_exp": "Mis Experiencias Exclusivas",
-    "private_nav": "Mi Navegación Privada",
-    "nature": "Mi Conexión con la Naturaleza",
-    "discover": "Descubre el Delta desde mi perspectiva única y sofisticada.",
+    "exclusive_exp": "Experiencias Exclusivas",
+    "private_nav": "Navegación Privada",
+    "nature": "Conexión con la Naturaleza",
+    "discover": "Descubre el Delta desde una perspectiva única y sofisticada.",
     "see_details": "Ver Detalles",
     "close": "Cerrar",
     "from": "Desde",
     "per_pax": "/ pax",
-    "book": "Reservar mi Expedición",
+    "book": "Reservar Expedición",
     "back_gallery": "[ Volver a la Galería ]",
     "consult": "Consultar",
-    "whatsapp_coming": "Hola! Me interesa conocer mis futuras expediciones."
+    "whatsapp_coming": "Hola! Me interesa conocer futuras expediciones."
   },
   "feedback": {
-    "label": "— Mi confianza verificada",
-    "title": "Feedback de mis clientes"
+    "label": "— Confianza verificada",
+    "title": "Feedback de clientes"
   },
   "custom": {
     "label": "— Diseña tu expedición conmigo",
@@ -63,13 +63,13 @@
     "tagline": "Curador de expediciones exclusivas en el Delta del Paraná. Naturaleza indómita y confort absoluto.",
     "navigation": "Navegación",
     "home": "Inicio",
-    "history": "Mi Historia",
-    "expeditions": "Mis Expediciones",
-    "contact_title": "Mi Contacto Directo",
-    "whatsapp": "Mi WhatsApp Directo",
-    "copyright": "© {year} Jonco Experience - Mis Expediciones Curadas",
+    "history": "Historia",
+    "expeditions": "Expediciones",
+    "contact_title": "Contacto Directo",
+    "whatsapp": "WhatsApp Directo",
+    "copyright": "© {year} Jonco Experience - Expediciones Curadas",
     "operating": "Operando en el Delta del Paraná desde 2024",
-    "instagram": "Mi Instagram",
+    "instagram": "Instagram",
     "developed_by": "Sitio desarrollado por",
     "whatsapp_message": "Hola Jon! Quiero consultar por una expedición.",
     "whatsapp_info": "Hola Jon! Quiero información."

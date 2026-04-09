@@ -126,8 +126,28 @@ export const ExperienceGrid = () => {
 
   return (
     <section className="py-24 px-6 w-full">
+      {/* SECTION TITLE */}
+      <div className="max-w-6xl mx-auto mb-16 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="space-y-4"
+        >
+          <span className="text-gold-light text-[8px] sm:text-[10px] font-black uppercase tracking-[0.5em] block opacity-70">
+            {t("exclusive_exp")}
+          </span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter text-white leading-tight">
+            Expediciones
+          </h2>
+          <p className="text-zinc-400 text-lg max-w-2xl mx-auto font-light">
+            {t("discover")}
+          </p>
+        </motion.div>
+      </div>
+
       {/* GRID DE CARDS PRINCIPAL */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
         {data.map((tour) => (
           <motion.div
             key={tour.id}

@@ -2,9 +2,46 @@
 import { motion } from "framer-motion";
 import { JON_CONTACT } from "@/lib/constants";
 import { useTranslations } from "next-intl";
+import { useState, useEffect } from "react";
 
 export const Footer = () => {
   const t = useTranslations("footer");
+  const [footerConfig, setFooterConfig] = useState({
+    tagline: "",
+    instagram: "",
+    email: "",
+    phone: "",
+    location: "",
+    coordinates: ""
+  });
+
+  useEffect(() => {
+    const loadFooterConfig = async () => {
+      try {
+        // Load contact data from contacto table
+        const contactoRes = await fetch("/api/contacto");
+        const contactoData = contactoRes.ok ? await contactoRes.json() : {};
+        
+        // Load footer-specific config from configuracion table
+        const configRes = await fetch("/api/configuracion");
+        const configData = configRes.ok ? await configRes.json() : [];
+        const getConfig = (clave: string) => configData.find((c: any) => c.clave === clave)?.valor || "";
+        
+        setFooterConfig({
+          tagline: getConfig("footer_tagline") || "Experiencias únicas en el Delta del Paraná",
+          instagram: contactoData.instagram || JON_CONTACT.instagram,
+          email: contactoData.email || JON_CONTACT.email,
+          phone: contactoData.telefono || JON_CONTACT.phone,
+          location: getConfig("footer_location") || JON_CONTACT.location,
+          coordinates: getConfig("footer_coordinates") || JON_CONTACT.coordinates
+        });
+      } catch (error) {
+        console.error("Error loading footer config:", error);
+      }
+    };
+    
+    loadFooterConfig();
+  }, []);
 
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
@@ -22,7 +59,7 @@ export const Footer = () => {
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-10 left-10 text-gold font-mono text-[8px] tracking-[0.8em] uppercase rotate-90 hidden lg:block">
-          Delta del Paraná // {JON_CONTACT.coordinates}
+          Delta del Paraná // {footerConfig.coordinates}
         </div>
       </div>
 
@@ -43,11 +80,11 @@ export const Footer = () => {
               <div className="w-12 h-0.5 bg-gold/50" />
             </div>
             <p className="text-zinc-400 text-sm leading-relaxed max-w-sm font-light">
-              {t("tagline")}
+              {footerConfig.tagline}
             </p>
             <div className="space-y-1 text-zinc-500 text-xs font-mono">
-              <p>{JON_CONTACT.location}</p>
-              <p>{JON_CONTACT.coordinates}</p>
+              <p>{footerConfig.location}</p>
+              <p>{footerConfig.coordinates}</p>
             </div>
           </motion.div>
 
@@ -99,13 +136,13 @@ export const Footer = () => {
             </div>
             <div className="space-y-3">
               <a
-                href={`mailto:${JON_CONTACT.email}`}
+                href={`mailto:${footerConfig.email}`}
                 className="text-zinc-400 hover:text-gold transition-colors text-sm font-medium block active:scale-95"
               >
-                {JON_CONTACT.email}
+                {footerConfig.email}
               </a>
               <a
-                href={JON_CONTACT.getWhatsAppLink(t("whatsapp_message"))}
+                href={`https://wa.me/${footerConfig.phone}?text=${encodeURIComponent(t("whatsapp_message"))}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-gold text-black px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white transition-all active:scale-95"
@@ -136,7 +173,7 @@ export const Footer = () => {
 
             <div className="flex gap-6 text-zinc-600 text-[10px] uppercase tracking-[0.2em] font-bold">
               <a
-                href={`https://instagram.com/${JON_CONTACT.instagram}`}
+                href={`https://instagram.com/${footerConfig.instagram}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-gold transition-colors active:scale-95"
@@ -144,7 +181,7 @@ export const Footer = () => {
                 {t("instagram")}
               </a>
               <a
-                href={JON_CONTACT.getWhatsAppLink(t("whatsapp_info"))}
+                href={`https://wa.me/${footerConfig.phone}?text=${encodeURIComponent(t("whatsapp_info"))}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-gold transition-colors active:scale-95"

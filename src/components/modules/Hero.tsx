@@ -69,7 +69,7 @@ export const Hero = () => {
   };
 
   return (
-    <section className="relative h-screen w-full overflow-hidden flex items-end justify-start bg-black">
+    <section className="relative h-[100vh] w-full overflow-hidden flex items-center justify-center bg-black" style={{ height: 'calc(100vh - var(--jonco-navbar-h, 80px))' }}>
       {/* Background Layer */}
       <div className="absolute inset-0 z-0">
         {heroVideoUrl === undefined ? null : heroVideoUrl ? (
@@ -91,51 +91,49 @@ export const Hero = () => {
             className="h-full w-full object-cover brightness-[0.75]"
           />
         )}
-        <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/30 to-transparent" />
-        <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-zinc-950 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/60" />
       </div>
 
-      {/* Contenido principal */}
-      <div className="relative z-10 px-6 sm:px-10 md:px-16 lg:px-24 pb-16 sm:pb-20 md:pb-0 max-w-4xl">
+      {/* Contenido principal centrado */}
+      <div className="relative z-10 px-6 sm:px-10 md:px-16 lg:px-24 text-center max-w-5xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="space-y-4 sm:space-y-6"
+          className="space-y-6 sm:space-y-8"
         >
           {textData.hero_label && (
-            <span className="text-gold-light uppercase text-[8px] sm:text-[10px] tracking-[0.5em] font-bold block opacity-90 drop-shadow-gold">
+            <span className="text-gold-light uppercase text-[8px] sm:text-[10px] tracking-[0.5em] font-bold block opacity-90 drop-shadow-gold mx-auto">
               {textData.hero_label}
             </span>
           )}
 
           {(textData.hero_titulo || textData.hero_titulo_accent) && (
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tighter text-white leading-tight uppercase">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tighter text-white leading-tight uppercase text-center">
               {textData.hero_titulo && <>{textData.hero_titulo}<br className="hidden sm:block" /></>}
               {textData.hero_titulo_accent && (
-                <span className="font-black text-gold-bright drop-shadow-lg">{textData.hero_titulo_accent}</span>
+                <span className="font-black text-gold-bright drop-shadow-lg block">{textData.hero_titulo_accent}</span>
               )}
             </h1>
           )}
 
           {textData.hero_subtitulo && (
-            <p className="text-zinc-200 text-sm sm:text-base md:text-lg max-w-md font-light leading-relaxed border-l border-gold/50 pl-4 sm:pl-6 drop-shadow-md">
+            <p className="text-zinc-200 text-sm sm:text-base md:text-lg max-w-2xl font-light leading-relaxed mx-auto text-center drop-shadow-md">
               {textData.hero_subtitulo}
             </p>
           )}
 
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-6 justify-center">
             <button
               onClick={() => scrollToSection("experiencias")}
-              className="bg-white text-black px-6 sm:px-8 py-3 sm:py-3.5 rounded-full font-bold text-[10px] sm:text-xs uppercase tracking-widest hover:bg-gold-light transition-all active:scale-95 w-full sm:w-auto shadow-lg hover:shadow-gold/25"
+              className="bg-white text-black px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-[10px] sm:text-xs uppercase tracking-widest hover:bg-gold-light transition-all active:scale-95 w-full sm:w-auto shadow-lg hover:shadow-gold/25"
             >
               {t("expeditions_btn")}
             </button>
 
             <button
               onClick={() => scrollToSection("historia")}
-              className="border border-white/40 text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-full font-bold text-[10px] sm:text-xs uppercase tracking-widest hover:border-gold-light hover:text-gold-light transition-all active:scale-95 w-full sm:w-auto shadow-lg hover:shadow-gold/20"
+              className="border border-white/40 text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-[10px] sm:text-xs uppercase tracking-widest hover:border-gold-light hover:text-gold-light transition-all active:scale-95 w-full sm:w-auto shadow-lg hover:shadow-gold/20"
             >
               {t("history_btn")}
             </button>

@@ -11,6 +11,57 @@ type Testimonial = {
   text: string;
   experience: string;
   date: string;
+  country?: string;
+};
+
+const COUNTRY_FLAGS: Record<string, string> = {
+  "AR": "🇦🇷",
+  "US": "🇺🇸", 
+  "BR": "🇧🇷",
+  "CL": "🇨🇱",
+  "UY": "🇺🇾",
+  "PY": "🇵🇾",
+  "BO": "🇧🇴",
+  "PE": "🇵🇪",
+  "CO": "🇨🇴",
+  "MX": "🇲🇽",
+  "ES": "🇪🇸",
+  "IT": "🇮🇹",
+  "FR": "🇫🇷",
+  "DE": "🇩🇪",
+  "UK": "🇬🇧",
+  "CA": "🇨🇦",
+  "AU": "🇦🇺",
+  "NZ": "🇳🇿",
+  "JP": "🇯🇵",
+  "CN": "🇨🇳",
+  "IN": "🇮🇳",
+  "ZA": "🇿🇦",
+  "RU": "🇷🇺",
+  "KR": "🇰🇷",
+  "NL": "🇳🇱",
+  "SE": "🇸🇪",
+  "NO": "🇳🇴",
+  "DK": "🇩🇰",
+  "FI": "🇫🇮",
+  "CH": "🇨🇭",
+  "AT": "🇦🇹",
+  "BE": "🇧🇪",
+  "IE": "🇮🇪",
+  "PT": "🇵🇹",
+  "GR": "🇬🇷",
+  "TR": "🇹🇷",
+  "IL": "🇮🇱",
+  "TH": "🇹🇭",
+  "SG": "🇸🇬",
+  "MY": "🇲🇾",
+  "PH": "🇵🇭",
+  "ID": "🇮🇩",
+  "VN": "🇻🇳",
+  "EG": "🇪🇬",
+  "NG": "🇳🇬",
+  "KE": "🇰🇪",
+  "GH": "🇬🇭",
 };
 
 const FALLBACK: Testimonial[] = [
@@ -19,6 +70,7 @@ const FALLBACK: Testimonial[] = [
     location: "CABA",
     experience: "Delta Premium",
     date: "Diciembre 2024",
+    country: "AR",
     text: "Una experiencia impecable. Todo fue elegante, puntual y con una atención al detalle que no se ve seguido. Volvimos con otra mirada del Delta.",
   },
   {
@@ -26,6 +78,7 @@ const FALLBACK: Testimonial[] = [
     location: "Tigre",
     experience: "Atardecer en Kayak",
     date: "Noviembre 2024",
+    country: "AR",
     text: "Silencio, agua, cielo naranja. La organización fue simple y perfecta. Se nota cuando alguien conoce el río de verdad.",
   },
   {
@@ -33,6 +86,7 @@ const FALLBACK: Testimonial[] = [
     location: "San Isidro",
     experience: "Salida Privada",
     date: "Octubre 2024",
+    country: "AR",
     text: "Lo que más valoro: seguridad, discreción y buen gusto. Fue una salida íntima, sin ruido, con momentos que no se compran.",
   },
 ];
@@ -143,7 +197,14 @@ export const ClientFeedback = () => {
               </p>
               <div className="flex items-end justify-between border-t border-white/5 pt-6">
                 <div className="space-y-1">
-                  <p className="text-white text-[11px] uppercase tracking-widest font-black">{testimonial.name}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-white text-[11px] uppercase tracking-widest font-black">{testimonial.name}</p>
+                    {testimonial.country && COUNTRY_FLAGS[testimonial.country] && (
+                      <span className="text-sm" title={`País: ${testimonial.country}`}>
+                        {COUNTRY_FLAGS[testimonial.country]}
+                      </span>
+                    )}
+                  </div>
                   <p className="text-white/30 text-[10px] uppercase tracking-widest font-black">{testimonial.location}</p>
                 </div>
                 <div className="text-right space-y-1">

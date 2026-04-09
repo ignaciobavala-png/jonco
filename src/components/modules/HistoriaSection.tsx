@@ -30,12 +30,16 @@ export const HistoriaSection = () => {
         const get = (clave: keyof HistoriaData) =>
           config.find((c: { clave: string; valor: string }) => c.clave === clave)?.valor || DEFAULTS[clave];
 
+        const firma = get("historia_firma");
+        // Fix for incorrect signature data - if it contains "Welcome aboard", extract just the name
+        const firmaFixed = firma.includes("Welcome aboard") ? "Jonco" : firma;
+
         setData({
           historia_imagen: get("historia_imagen"),
           historia_cita: get("historia_cita"),
           historia_parrafo_1: get("historia_parrafo_1"),
           historia_parrafo_2: get("historia_parrafo_2"),
-          historia_firma: get("historia_firma"),
+          historia_firma: firmaFixed,
         });
       } catch {
         // keep defaults on error
@@ -75,7 +79,7 @@ export const HistoriaSection = () => {
       </div>
 
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 xl:gap-24 items-center lg:items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 xl:gap-24 items-start">
 
           {/* MULTIMEDIA */}
           <motion.div
@@ -83,9 +87,9 @@ export const HistoriaSection = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="w-full lg:w-1/2"
+            className="order-2 lg:order-1"
           >
-            <div ref={imgRef} className="relative rounded-sm overflow-hidden shadow-2xl">
+            <div ref={imgRef} className="relative rounded-sm overflow-hidden shadow-2xl sticky top-24">
               {data.historia_imagen ? (
                 <img
                   src={data.historia_imagen}
@@ -100,7 +104,7 @@ export const HistoriaSection = () => {
           </motion.div>
 
           {/* TEXTO */}
-          <div className="w-full lg:w-1/2 space-y-6 sm:space-y-8">
+          <div className="order-1 lg:order-2 space-y-6 sm:space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -129,7 +133,7 @@ export const HistoriaSection = () => {
                       <span className="text-white text-[8px] sm:text-[10px] uppercase tracking-widest font-black mb-2 opacity-30 italic">
                         {t("authenticated_by")}
                       </span>
-                      <span className="font-cormorant font-semibold text-3xl sm:text-4xl lg:text-5xl text-gold-light pb-2 drop-shadow-md">
+                      <span className="font-cormorant font-semibold text-3xl sm:text-4xl lg:text-5xl text-gold-light pb-2 drop-shadow-md break-words">
                         {data.historia_firma}
                       </span>
                     </div>

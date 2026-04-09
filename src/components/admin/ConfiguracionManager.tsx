@@ -28,6 +28,11 @@ export const ConfiguracionManager = () => {
   const [historiaFirma, setHistoriaFirma] = useState("");
   const [historiaImagen, setHistoriaImagen] = useState("");
 
+  // Footer form state
+  const [footerTagline, setFooterTagline] = useState("");
+  const [footerLocation, setFooterLocation] = useState("");
+  const [footerCoordinates, setFooterCoordinates] = useState("");
+
   const load = async () => {
     setLoading(true);
     setError(null);
@@ -47,6 +52,9 @@ export const ConfiguracionManager = () => {
       setHeroTitulo(get("hero_titulo"));
       setHeroTituloAccent(get("hero_titulo_accent"));
       setHeroSubtitulo(get("hero_subtitulo"));
+      setFooterTagline(get("footer_tagline"));
+      setFooterLocation(get("footer_location"));
+      setFooterCoordinates(get("footer_coordinates"));
     } catch {
       setError("No se pudo cargar la configuración. Verificá la conexión a la base de datos.");
     } finally {
@@ -103,6 +111,22 @@ export const ConfiguracionManager = () => {
       await load();
     } catch {
       alert("Error al guardar la sección Historia. Intentá de nuevo.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const saveFooter = async () => {
+    setSaving(true);
+    try {
+      await Promise.all([
+        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "footer_tagline", valor: footerTagline }) }),
+        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "footer_location", valor: footerLocation }) }),
+        fetch("/api/configuracion", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ clave: "footer_coordinates", valor: footerCoordinates }) }),
+      ]);
+      await load();
+    } catch {
+      alert("Error al guardar la configuración del Footer. Intentá de nuevo.");
     } finally {
       setSaving(false);
     }
@@ -292,6 +316,70 @@ export const ConfiguracionManager = () => {
             className="w-full sm:w-auto bg-white text-black px-8 py-3 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-zinc-200 transition-colors disabled:opacity-40"
           >
             {saving ? "Guardando..." : "Guardar Historia"}
+          </button>
+        </div>
+
+        {/* ── SECCIÓN FOOTER ── */}
+        <div className="bg-zinc-900/40 border border-white/5 rounded-2xl p-6 space-y-6">
+          <div>
+            <h3 className="text-white font-black text-lg mb-1">Footer</h3>
+            <p className="text-zinc-400 text-sm">
+              Información de contacto y datos mostrados en el pie de página.
+            </p>
+          </div>
+
+          {/* Tagline */}
+          <div>
+            <label className="text-[10px] uppercase tracking-widest font-black text-white/40 block mb-2">
+              Tagline (descripción breve)
+            </label>
+            <textarea
+              value={footerTagline}
+              onChange={e => setFooterTagline(e.target.value)}
+              rows={3}
+              className="w-full bg-zinc-800 border border-white/10 rounded-lg px-4 py-3 text-white text-sm font-light resize-none focus:outline-none focus:border-white/30"
+              placeholder="Descripción breve que aparece debajo del logo..."
+            />
+          </div>
+
+          <p className="text-zinc-500 text-sm mb-4">
+              Los datos de contacto (email, teléfono, Instagram) se configuran en la pestaña "Contacto".
+            </p>
+
+          {/* Location Info */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="text-[10px] uppercase tracking-widest font-black text-white/40 block mb-2">
+                Ubicación
+              </label>
+              <input
+                type="text"
+                value={footerLocation}
+                onChange={e => setFooterLocation(e.target.value)}
+                className="w-full bg-zinc-800 border border-white/10 rounded-lg px-4 py-3 text-white text-sm font-light focus:outline-none focus:border-white/30"
+                placeholder="Tigre, Buenos Aires, Argentina"
+              />
+            </div>
+            <div>
+              <label className="text-[10px] uppercase tracking-widest font-black text-white/40 block mb-2">
+                Coordenadas
+              </label>
+              <input
+                type="text"
+                value={footerCoordinates}
+                onChange={e => setFooterCoordinates(e.target.value)}
+                className="w-full bg-zinc-800 border border-white/10 rounded-lg px-4 py-3 text-white text-sm font-light focus:outline-none focus:border-white/30"
+                placeholder="-34.4267°S, 58.5796°W"
+              />
+            </div>
+          </div>
+
+          <button
+            onClick={saveFooter}
+            disabled={saving}
+            className="w-full sm:w-auto bg-white text-black px-8 py-3 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-zinc-200 transition-colors disabled:opacity-40"
+          >
+            {saving ? "Guardando..." : "Guardar Footer"}
           </button>
         </div>
 

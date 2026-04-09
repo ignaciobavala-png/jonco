@@ -7,8 +7,8 @@ import { useRouter, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 
 const LOCALES = [
-  { code: "es", flag: "🇦🇷", label: "ES" },
   { code: "en", flag: "🇺🇸", label: "EN" },
+  { code: "es", flag: "🇦🇷", label: "ES" },
   { code: "it", flag: "🇮🇹", label: "IT" },
 ] as const;
 
@@ -131,7 +131,7 @@ export const Navbar = () => {
     const section = document.getElementById(sectionId);
     if (section) {
       const offset = getNavbarOffset();
-      const y = window.scrollY + section.getBoundingClientRect().top - offset - 16;
+      const y = section.getBoundingClientRect().top + window.scrollY - offset - 20;
       window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
     }
     setMobileMenuOpen(false);
@@ -148,7 +148,7 @@ export const Navbar = () => {
       <nav
         ref={navRef}
         className={`fixed top-0 w-full z-[200] transition-all duration-500 ${immersiveOpen ? "opacity-0 pointer-events-none" : "opacity-100"} ${
-          scrolled ? "bg-white/5 backdrop-blur-xl border-b border-white/10 py-3 md:py-4" : "!bg-transparent py-6 md:py-8"
+          scrolled ? "bg-white/5 backdrop-blur-xl border-b border-white/10 py-3 md:py-4" : "!bg-transparent py-4 md:py-6"
         }`}
         style={{
           backgroundColor: scrolled ? "rgba(255, 255, 255, 0.05)" : "transparent",
